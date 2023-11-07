@@ -3,7 +3,7 @@ import pygame
 from sp_Carte import Carte
 import random
 import Utils
-
+from Checkpoints import Checkpoint
 
 class mj_crous(AbstractMiniJeu):
 
@@ -11,9 +11,10 @@ class mj_crous(AbstractMiniJeu):
         self.m_level = level
 
     def run_miniJeu(self):
+        success = False
         clock = pygame.time.Clock()
         timer = 0
-        max_time = 20#Utils.getMaxTimeForLevel(10, self.m_level)
+        max_time = Utils.getMaxTimeForLevel(10, self.m_level)
         timer_width = 600
         
         mid_x = screen.get_width() / 2
@@ -22,7 +23,12 @@ class mj_crous(AbstractMiniJeu):
         sprite_group = pygame.sprite.Group()
         carte = Carte(mid_x, mid_y-100)
         sprite_group.add(carte)
-    
+
+        slide_height = mid_y + 150
+
+        checkpoints = Checkpoint((mid_x - 350, slide_height),(mid_x - 125, slide_height),
+                                  (mid_x + 125, slide_height), (mid_x + 350, slide_height))
+
         while (timer < max_time):
             for event in pygame.event.get():
                 if (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1) and carte.rect.collidepoint(event.pos) and not carte.drag:
@@ -32,15 +38,26 @@ class mj_crous(AbstractMiniJeu):
 
                 elif (event.type == pygame.MOUSEBUTTONUP and event.button == 1):
                         carte.drag = False
+                        if (not success):
+                            carte.rect.center = (mid_x, mid_y-100)     
 
                 elif (event.type == pygame.MOUSEMOTION and carte.drag):
                         mouse_x, mouse_y = pygame.mouse.get_pos()
-                        carte.rect.center = (mouse_x, mouse_y)
-                
-
+                        if (abs(slide_height - mouse_y) < 75):
+                            carte.rect.center = (mouse_x, slide_height)
+                        else:
+                            carte.rect.center = (mouse_x, mouse_y)
+                            checkpoints.index = 0
+            overlap = [currCheck for currCheck in checkpoints.liste if (pygame.Rect(currCheck)).colliderect(carte.rect)]
+            if (len(overlap) > 0):
+                if id(overlap[0]) == id(checkpoints.liste[checkpoints.index]):
+                    checkpoints.index += 1
+                    if (checkpoints.index == len(checkpoints.liste)):
+                        return True
 
             screen.fill("black")
-            #^ screen.blit du background
+            # for cp in checkpoints.liste:
+            #     pygame.draw.rect(screen, ("white"), cp)
             sprite_group.draw(screen)
 
             barre_w = timer_width * (1-(timer/max_time))

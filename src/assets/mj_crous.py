@@ -69,7 +69,7 @@ if __name__ == "__main__":
     # obj = mj_crous(1)
     # print("Resultat du mini jeu: ", obj.run_miniJeu())
 
-    for i in range(1,10):
+    for i in range(10,20):
         obj = mj_crous(i)
         print(f"Resultat du mini jeu: {obj.run_miniJeu()}")
 

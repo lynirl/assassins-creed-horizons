@@ -6,4 +6,7 @@ def getMaxTimeForLevel(timeLvlZero, level):
     
     #nbr de frames
     # return (math.pow(1.5, level) / math.pow(1.5, 10)) * base_framerate
-    return (-0.9 * level) + timeLvlZero
+    result = (-0.9 * level) + timeLvlZero
+    if (result < 1):
+        return 1
+    return result
