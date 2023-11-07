@@ -1,6 +1,6 @@
 from AbstractMiniJeu import AbstractMiniJeu
 import pygame
-from Star import Star
+from sp_Carte import Carte
 import random
 import Utils
 
@@ -12,23 +12,32 @@ class mj_crous(AbstractMiniJeu):
 
     def run_miniJeu(self):
         clock = pygame.time.Clock()
-        running = True
         timer = 0
-        #fonction de get time a faire
-        max_time = 10
+        max_time = 20#Utils.getMaxTimeForLevel(10, self.m_level)
         timer_width = 600
         
         mid_x = screen.get_width() / 2
         mid_y = screen.get_height() / 2
+
         sprite_group = pygame.sprite.Group()
+        carte = Carte(mid_x, mid_y-100)
+        sprite_group.add(carte)
     
-        while (running and timer < max_time):
+        while (timer < max_time):
             for event in pygame.event.get():
-                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                     for sprite in sprite_group:
-                        if sprite.rect.collidepoint(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]):
-                            #sprite.kill()
-                            return sprite.type
+                if (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1) and carte.rect.collidepoint(event.pos) and not carte.drag:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    carte.drag = True
+                    carte.rect.center = (mouse_x, mouse_y)
+
+                elif (event.type == pygame.MOUSEBUTTONUP and event.button == 1):
+                        carte.drag = False
+
+                elif (event.type == pygame.MOUSEMOTION and carte.drag):
+                        mouse_x, mouse_y = pygame.mouse.get_pos()
+                        carte.rect.center = (mouse_x, mouse_y)
+                
+
 
             screen.fill("black")
             #^ screen.blit du background
