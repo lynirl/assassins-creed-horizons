@@ -3,10 +3,9 @@ import pygame as py
 from pynput import keyboard
 
 class mj_velo(AbstractMiniJeu):
-    def __init__(self):
-        # Initialisation de la classe mj_velo
+    def __init__(self,level):
+        self.m_level = level
         super().__init__()
-        # Autres initialisations spécifiques à mj_velo
 
     def erreur(screen, tombe, envelo):
 
@@ -25,7 +24,11 @@ class mj_velo(AbstractMiniJeu):
 
     def run_miniJeu(self):
         pygame.init()
+        #Timer
         clock = pygame.time.Clock()
+        timer = 0
+        max_time = Utils.getMaxTimeForLevel(10,self.m_level)
+        #Variables
         click = 0
         parcours = 0
         ARRIVEE = 10
@@ -38,7 +41,7 @@ class mj_velo(AbstractMiniJeu):
         # Initialisation de l'écran
         screen = pygame.display.set_mode((1024, 768))
 
-        while parcours<ARRIVEE #and timer pas à 0:
+        while parcours<ARRIVEE and timer < max_time:
 
             screen.blit(fond, (fond_x, 0))
             screen.blit(envelo, (0, 0))
