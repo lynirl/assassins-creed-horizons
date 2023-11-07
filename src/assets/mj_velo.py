@@ -8,22 +8,19 @@ class mj_velo(AbstractMiniJeu):
         super().__init__()
         # Autres initialisations spécifiques à mj_velo
 
-    def erreur(screen):
+    def erreur(screen, tombe, envelo):
 
-        # Afficher tombé.png au premier plan
-        screen.blit(img_tombe, (0, 0))
+        # Afficher "tombe.png" au premier plan
+        screen.blit(tombe, (0, 0))
         pygame.display.flip()
 
         # Bloquer le jeu pendant 3 secondes
         pygame.time.delay(3000)
 
-        # Retirer l'image tombé.png
-        screen.fill((0, 0, 0))  # Remplir l'écran avec une couleur noire pour effacer l'image précédente
+        # Afficher l'image de premier plan "velo.png" à nouveau
+        screen.blit(envelo, (0, 0))
         pygame.display.flip()
 
-        # Afficher envélo.png au premier plan
-        screen.blit(img_velo, (0, 0))
-        pygame.display.flip()
 
 
     def run_miniJeu(self):
@@ -32,19 +29,21 @@ class mj_velo(AbstractMiniJeu):
         click = 0
         parcours = 0
         ARRIVEE = 10
+        fond_x=0
+        fin_jeu = False
+        fond = pygame.image.load("fondv.png")
         tombe = pygame.image.load("tombe.png")
         envelo = pygame.image.load("envelo.png")
 
         # Initialisation de l'écran
         screen = pygame.display.set_mode((1024, 768))
-        fond = pygame.image.load("fondv.png")
-        velo = pygame.image.load("imagevelo.png")
 
-        fond_x=0;
-
-        #afficher_image_frame_1 (bg)
-        #afficher imagevélo.png (fg)
         while parcours<ARRIVEE #and timer pas à 0:
+
+            screen.blit(fond, (fond_x, 0))
+            screen.blit(envelo, (0, 0))
+            pygame.display.flip()
+
             if key.char == 'A' or key.char == 'a':
                 if click == 0:
                     parcours+=1
