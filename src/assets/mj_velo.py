@@ -8,19 +8,23 @@ class mj_velo(AbstractMiniJeu):
         self.m_level = level
         super().__init__()
 
-    def erreur(screen, tombe, envelo):
+    def erreur(self, screen):
 
-        # Afficher "tombe.png" au premier plan
-        screen.blit(tombe, (0, 0))
+        fondv = pygame.image.load("./src/assets/fondv.png")
+        tombe = pygame.image.load("./src/assets/tombe.png")
+        envelo = pygame.image.load("./src/assets/envelo.png")
+        fond_x = 0
+
+        print("erreur")
+        screen.blit(fondv, (fond_x, 0))
         pygame.display.flip()
-
-        # Bloquer le jeu pendant 3 secondes
+        screen.blit(tombe, (512, 505))
+        pygame.display.flip()
         pygame.time.delay(3000)
-
-        # Afficher l'image de premier plan "velo.png" à nouveau
-        screen.blit(envelo, (0, 0))
+        screen.blit(fondv, (fond_x, 0))
         pygame.display.flip()
-
+        screen.blit(envelo, (512, 505))
+        pygame.display.flip()
 
 
     def run_miniJeu(self):
@@ -28,13 +32,13 @@ class mj_velo(AbstractMiniJeu):
         #Timer
         clock = pygame.time.Clock()
         timer = 0
-        max_time = Utils.getMaxTimeForLevel(10,self.m_level)
+        max_time = 30#Utils.getMaxTimeForLevel(10,self.m_level)
         #Variables
-        click = 0
-        parcours, ARRIVEE = 0, 10
+        click = True
+        parcours, ARRIVEE = 0, 20
         fond_x = 0
-        fond = pygame.image.load("./src/assets/fondv.png")
-        tombe = pygame.image.load("./src/assets/tombe.jpeg")
+        fondv = pygame.image.load("./src/assets/fondv.png")
+        tombe = pygame.image.load("./src/assets/tombe.png")
         envelo = pygame.image.load("./src/assets/envelo.png")
 
         # Initialisation de l'écran
@@ -42,32 +46,21 @@ class mj_velo(AbstractMiniJeu):
 
         while parcours<ARRIVEE and timer < max_time:
 
-            screen.blit(fond, (fond_x, 0))
+            screen.blit(fondv, (fond_x, 0))
             screen.blit(envelo, (512, 505))
-            pygame.display.flip()
-            running = True
+            
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if (event.key==pygame.K_a and click) or (event.key==pygame.K_z and not click):
+                        click = not click
+                        parcours+=1
+                        fond_x -= 50
+                        screen.blit(fondv,(fond_x,0))
+                    else:
+                        self.erreur(screen)
 
-            while running:
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        running = False
-                    elif event.type == pygame.KEYDOWN:
-                        if event.key==pygame.K_a:
-                            if click == 0:
-                                parcours+=1
-                                click = 1
-                                fond_x -= 6 #Déplacer vers la droite
-                                screen.blit(fondv.png,(fond_x,0))
-                            else:
-                                self.erreur()
-                        if event.key==pygame.K_z:
-                            if click == 1:
-                                parcours+=1
-                                click = 0
-                                fond_x -= 6
-                            else:
-                                self.erreur()
-
+                    print(f"Touche : {event.key}")
+            pygame.display.update()
             timer += clock.tick(30)/1000
         return (parcours == ARRIVEE)         
 
