@@ -1,6 +1,7 @@
 import math
-import pygame as py
-from pynput import keyboard
+import pygame
+import Utils
+from AbstractMiniJeu import AbstractMiniJeu
 
 class mj_velo(AbstractMiniJeu):
     def __init__(self,level):
@@ -30,13 +31,11 @@ class mj_velo(AbstractMiniJeu):
         max_time = Utils.getMaxTimeForLevel(10,self.m_level)
         #Variables
         click = 0
-        parcours = 0
-        ARRIVEE = 10
-        fond_x=0
-        fin_jeu = False
-        fond = pygame.image.load("fondv.png")
-        tombe = pygame.image.load("tombe.png")
-        envelo = pygame.image.load("envelo.png")
+        parcours, ARRIVEE = 0, 10
+        fond_x = 0
+        fond = pygame.image.load("./src/assets/fondv.png")
+        tombe = pygame.image.load("./src/assets/tombe.jpeg")
+        envelo = pygame.image.load("./src/assets/envelo.png")
 
         # Initialisation de l'écran
         screen = pygame.display.set_mode((1024, 768))
@@ -44,24 +43,33 @@ class mj_velo(AbstractMiniJeu):
         while parcours<ARRIVEE and timer < max_time:
 
             screen.blit(fond, (fond_x, 0))
-            screen.blit(envelo, (0, 0))
+            screen.blit(envelo, (512, 505))
             pygame.display.flip()
+            running = True
 
-            if key.char == 'A' or key.char == 'a':
-                if click == 0:
-                    parcours+=1
-                    click = 1
-                    fond_x -= 6 #Déplacer vers la droite
-                    screen.blit(fondv.png,(fond_x,0))
-                else:
-                    erreur()tombé
-            if key.char == 'Z' or key.char == 'z':
-                if click == 1:
-                    parcours+=1
-                    click = 0;
-                    fond_x -= 6
-                else:
-                    erreur()           
+            while running:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        running = False
+                    elif event.type == pygame.KEYDOWN:
+                        if event.key==pygame.K_a:
+                            if click == 0:
+                                parcours+=1
+                                click = 1
+                                fond_x -= 6 #Déplacer vers la droite
+                                screen.blit(fondv.png,(fond_x,0))
+                            else:
+                                self.erreur()
+                        if event.key==pygame.K_z:
+                            if click == 1:
+                                parcours+=1
+                                click = 0
+                                fond_x -= 6
+                            else:
+                                self.erreur()
+
+            timer += clock.tick(30)/1000
+        return (parcours == ARRIVEE)         
 
 
 if __name__ == "__main__":
@@ -69,8 +77,8 @@ if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode((1024, 768))
 
-    obj = mj_crous(1)
-    print("Résultats mj : ", obj.run_minijeu())
+    obj = mj_velo(1)
+    print("Résultats mj : ", obj.run_miniJeu())
 
     pygame.quit()
     print("Ok")
