@@ -1,14 +1,15 @@
 from AbstractMiniJeu import AbstractMiniJeu
 import pygame
-from Star import Star
+from sp_Star import Star
 import random
 import Utils
 
 
 class mj_crous(AbstractMiniJeu):
 
-    def __init__(self, level):
+    def __init__(self, level, screen):
         self.m_level = level
+        self.screen = screen
 
     def run_miniJeu(self):
         # framerate = Utils.getFramerateForLevel(60, self.m_level)
@@ -19,12 +20,12 @@ class mj_crous(AbstractMiniJeu):
         
 
         sprite_group = pygame.sprite.Group()
-        mid_x = screen.get_width() / 2
-        mid_y = screen.get_height() / 2
+        mid_x = self.screen.get_width() / 2
+        mid_y = self.screen.get_height() / 2
 
         stars = []
         for i in range(self.m_level + 3):
-            stars.append(newStar(200, 200, screen.get_width()-200,screen.get_height()-200, stars))  
+            stars.append(newStar(200, 200, self.screen.get_width()-200,self.screen.get_height()-200, stars))  
         stars[0] = Star(stars[0].rect.x, stars[0].rect.y, True)
 
         sprite_group.add(stars)
@@ -36,13 +37,13 @@ class mj_crous(AbstractMiniJeu):
                             #sprite.kill()
                             return sprite.type
 
-            screen.fill("black")
+            self.screen.fill("black")
             #^ screen.blit du background
-            sprite_group.draw(screen)
+            sprite_group.draw(self.screen)
 
             barre_w = timer_width * (1-(timer/max_time))
             loading_bar_rect = pygame.Rect(mid_x-(timer_width/2), mid_y-250, barre_w, 20)
-            pygame.draw.rect(screen, "red", loading_bar_rect)
+            pygame.draw.rect(self.screen, "red", loading_bar_rect)
             
             
             pygame.display.update()
@@ -70,7 +71,7 @@ if __name__ == "__main__":
     # print("Resultat du mini jeu: ", obj.run_miniJeu())
 
     for i in range(10,20):
-        obj = mj_crous(i)
+        obj = mj_crous(i, screen)
         print(f"Resultat du mini jeu: {obj.run_miniJeu()}")
 
 

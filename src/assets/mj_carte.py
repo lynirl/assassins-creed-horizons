@@ -5,7 +5,7 @@ import random
 import Utils
 from Checkpoints import Checkpoint
 
-class mj_crous(AbstractMiniJeu):
+class mj_carte(AbstractMiniJeu):
 
     def __init__(self, level):
         self.m_level = level
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode((1024, 768))
 
-    obj = mj_crous(1)
+    obj = mj_carte(1)
     print("Resultat du mini jeu: ", obj.run_miniJeu())
 
     # for i in range(1,10):
