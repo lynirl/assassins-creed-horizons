@@ -1,9 +1,12 @@
 import pygame
+import os
 import random
 import Utils
+from sp_alarmClock import AlarmClock
 
 class mj_alarmClock():
 
+    IMG_BG = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/reveil/reveil_bg.png")
     def __init__(self, level, screen = pygame.display.set_mode((1024, 768))):
         super().__init__()
         self.m_level = level
@@ -24,9 +27,13 @@ class mj_alarmClock():
         mid_y = self.screen.get_height() / 2
 
         #position du rectangle
-        rect_x = random.randint(0, self.screen.get_width() - 200)
-        rect_y = random.randint(0, self.screen.get_height() - 100)
-        re = pygame.rect.Rect([rect_x, rect_y, 200, 100])
+        rect_x = random.randint(200, self.screen.get_width() - 200)
+        rect_y = random.randint(200, self.screen.get_height() - 100)
+
+        sp_group = pygame.sprite.Group()
+        reveil = AlarmClock(rect_x, rect_y)
+        sp_group.add(reveil)
+        re = reveil.rect
 
         #vitesse & direction
         rect_speed_x = random.randint(-1, -1) * (1.3**self.m_level)#random.randint(-1, -1) * (15 * (self.m_level / 10))
@@ -45,10 +52,11 @@ class mj_alarmClock():
                     x, y = pygame.mouse.get_pos() #on récup la pos
                     if re.collidepoint(x, y):
                         compteur+=1
+                        if compteur == 3:
+                            return True
+                        reveil.image = AlarmClock.STATES[compteur]
             
             #après 3 clicks on win
-            if compteur == 3:
-                return True
 
             
             #on bouge le rectangle en incrémentant ses coords avec sa vitesse
@@ -61,18 +69,15 @@ class mj_alarmClock():
             if re.x + 200 > 1024 or re.x < 0:
                 rect_speed_x = -rect_speed_x #la même ici
             
-            self.screen.fill("black") #la couleur de fond
+            self.screen.blit(mj_alarmClock.IMG_BG, (0,0))
+
+            sp_group.draw(self.screen)
 
             #tout pour la barre
             barre_w = timer_width * (1-(timer/max_time))
             loading_bar_rect = pygame.Rect(mid_x-(timer_width/2), mid_y-250, barre_w, 20)
-            
-            #le rectangle
-            pygame.draw.rect(self.screen, "white", re)
-
-            #afficher la barre au dessus et pas au dessous du rectangle 
             pygame.draw.rect(self.screen, "red", loading_bar_rect)
-
+            pygame.draw.rect(self.screen, (0,0,0, 120), loading_bar_rect, 4)
             #60 fps
             clock.tick(60)
 

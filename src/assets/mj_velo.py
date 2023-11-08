@@ -8,10 +8,10 @@ class mj_velo():
         self.m_level = level
         self.screen = screen
 
-    VELO_FS = [pygame.image.load((os.path.dirname(__file__) + "/sprites/images/VELO_F1.png")),
-               pygame.image.load((os.path.dirname(__file__) + "/sprites/images/VELO_F2.png")),
-               pygame.image.load((os.path.dirname(__file__) + "/sprites/images/VELO_F3.png"))]
-    IMG_FONDV = pygame.image.load((os.path.dirname(__file__) + "/sprites/images/fondv.png"))
+    VELO_FS = [pygame.image.load((os.path.dirname(__file__) + "/sprites/images/velo/velo1.png")),
+               pygame.image.load((os.path.dirname(__file__) + "/sprites/images/velo/velo2.png")),
+               pygame.image.load((os.path.dirname(__file__) + "/sprites/images/velo/velo3.png"))]
+    IMG_FONDV = pygame.image.load((os.path.dirname(__file__) + "/sprites/images/velo/veloBG.png"))
         
     def getNbStep(self, level):
         return 2*level + 10
@@ -40,7 +40,7 @@ class mj_velo():
         while parcours<ARRIVEE and timer < MAX_TIME:
 
             self.screen.blit(mj_velo.IMG_FONDV, (fond_x, 0))
-            self.screen.blit(mj_velo.VELO_FS[velo_frame % 3], (0, self.screen.get_height() - 200))
+            self.screen.blit(mj_velo.VELO_FS[velo_frame % 3], (0, self.screen.get_height() - 350))
             
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:

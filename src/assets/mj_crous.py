@@ -1,10 +1,12 @@
 import pygame
+import os
 from sp_Star import Star
 import random
 import Utils
 
 
 class mj_crous():
+    IMG_BG = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/crous/crous_fond.png")
 
     def __init__(self, level, screen):
         self.m_level = level
@@ -36,7 +38,7 @@ class mj_crous():
                             #sprite.kill()
                             return sprite.type
 
-            self.screen.fill("black")
+            self.screen.blit(mj_crous.IMG_BG, (0,0))
             #^ screen.blit du background
             sprite_group.draw(self.screen)
 
@@ -45,7 +47,7 @@ class mj_crous():
             pygame.draw.rect(self.screen, "red", loading_bar_rect)
             
             
-            pygame.display.update()
+            pygame.display.flip()
             
             timer += clock.tick(30)/1000
             
