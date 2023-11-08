@@ -1,12 +1,12 @@
-from AbstractMiniJeu import AbstractMiniJeu
 import pygame
 import random
 import sp_Teacher
 
-class mj_Phone(AbstractMiniJeu):
+class mj_Phone():
 
-    def __init__(self, level):
+    def __init__(self, level, screen):
         self.m_level = level
+        self.screen = screen
     
     def run_miniJeu(self):
 
@@ -22,8 +22,8 @@ class mj_Phone(AbstractMiniJeu):
         timer_width = 600
 
         #coords du timer
-        mid_x = screen.get_width() / 2
-        mid_y = screen.get_height() / 2
+        mid_x = self.screen.get_width() / 2
+        mid_y = self.screen.get_height() / 2
 
 
         #barre de distraction
@@ -72,10 +72,10 @@ class mj_Phone(AbstractMiniJeu):
 
 
             #affiche la barre du timer
-            pygame.draw.rect(screen, "red", loading_bar_rect)
+            pygame.draw.rect(self.screen, "red", loading_bar_rect)
 
             #affiche la barre de distraction
-            pygame.draw.rect(screen, "blue", dis_rect)
+            pygame.draw.rect(self.screen, "white", dis_rect)
             
             #-----------------------------------
 
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode((1024, 768))
 
-    obj = mj_Phone(1)
+    obj = mj_Phone(1, screen)
     print("état:", obj.run_miniJeu())
 
     pygame.quit()
