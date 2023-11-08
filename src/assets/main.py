@@ -5,6 +5,35 @@ from mj_carte import mj_carte
 from mj_alarmClock import mj_alarmClock
 from mj_velo import mj_velo
 
+def startMenu(a_screen):
+    BG = [pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG0.png")]#,
+        #   pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG1.png"),
+        #   pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG2.png"),
+        #   pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG3.png"),
+        #   pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG4.png"),
+        #   pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG5.png"),
+        #   pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG6.png"),
+        #   pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG7.png")]
+
+
+    inStartMenu = True
+    surf = pygame.surface.Surface((1024,768))
+    surf.fill("white")
+    frame = 0
+    time = 0
+    while(inStartMenu and time < 6):
+   
+        a_screen.blit(surf, (0,0))
+        if (frame == 2):
+            frame = 0
+        else:
+            frame+=1
+        time += pygame.time.Clock().tick(2) / 1000
+    
+
+
+
+
 def main():
     IMG_SUCCESS = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/succes.png")
     MID_X = 1024 / 2
@@ -14,8 +43,7 @@ def main():
     vies = 3
 
 
-    pygame.init()
-    screen = pygame.display.set_mode((1024, 768))
+    
     while (round < 10 and vies > 0):
         mini_jeux = [mj_alarmClock(round, screen),
                      mj_velo(round, screen),
@@ -49,4 +77,7 @@ def main():
 
 
 if __name__ == "__main__":
+    pygame.init()
+    screen = pygame.display.set_mode((1024, 768))
+    startMenu(screen)
     main()

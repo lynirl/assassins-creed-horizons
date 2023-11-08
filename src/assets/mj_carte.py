@@ -77,6 +77,7 @@ class mj_carte():
             barre_w = TIMER_WIDTH * (1-(timer/MAX_TIME))
             loading_bar_rect = pygame.Rect(MID_X-(TIMER_WIDTH/2), MID_Y-250, barre_w, 20)
             pygame.draw.rect(self.screen, "red", loading_bar_rect)
+            pygame.draw.rect(self.screen, (0,0,0, 120), loading_bar_rect, 4)
             
             
             pygame.display.update()

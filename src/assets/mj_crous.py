@@ -45,6 +45,7 @@ class mj_crous():
             barre_w = timer_width * (1-(timer/max_time))
             loading_bar_rect = pygame.Rect(mid_x-(timer_width/2), mid_y-250, barre_w, 20)
             pygame.draw.rect(self.screen, "red", loading_bar_rect)
+            pygame.draw.rect(self.screen, (0,0,0, 120), loading_bar_rect, 4)
             
             
             pygame.display.flip()
