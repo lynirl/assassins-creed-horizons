@@ -16,7 +16,7 @@ class mj_alarmClock(AbstractMiniJeu):
         timer = 0
         timer_width = 600
 
-        #coords du timer
+        #coords du timerr
         mid_x = screen.get_width() / 2
         mid_y = screen.get_height() / 2
 
