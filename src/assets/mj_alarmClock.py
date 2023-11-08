@@ -20,10 +20,6 @@ class mj_alarmClock(AbstractMiniJeu):
         mid_x = screen.get_width() / 2
         mid_y = screen.get_height() / 2
 
-        #running?
-        running = True
-        dt = 0
-
         #position du rectangle
         rect_x = 50
         rect_y = 50
@@ -40,7 +36,7 @@ class mj_alarmClock(AbstractMiniJeu):
         while (timer < max_time): #tant que le jeu tourne
             for event in pygame.event.get(): #on parcourt les events en cours
                 if event.type == pygame.QUIT: #si l'event est de type quit, alors on quitte le jeu (= quand on appuie sur la croix)
-                    running = False
+                    pygame.quit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     x, y = pygame.mouse.get_pos() #on récup la pos
                     if re.collidepoint(x, y):
