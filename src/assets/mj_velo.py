@@ -1,66 +1,64 @@
 import math
 import pygame
 import Utils
-from AbstractMiniJeu import AbstractMiniJeu
+import os
 
-class mj_velo(AbstractMiniJeu):
-    def __init__(self,level):
+class mj_velo(): 
+    def __init__(self,level, screen =pygame.display.set_mode((1024, 768))):
         self.m_level = level
-        super().__init__()
+        self.screen = screen
 
-    def erreur(self, screen):
-
-        fondv = pygame.image.load("./src/assets/fondv.png")
-        tombe = pygame.image.load("./src/assets/tombe.png")
-        envelo = pygame.image.load("./src/assets/envelo.png")
-        fond_x = 0
-
-        print("erreur")
-        screen.blit(fondv, (fond_x, 0))
-        pygame.display.flip()
-        screen.blit(tombe, (512, 505))
-        pygame.display.flip()
-        pygame.time.delay(3000)
-        screen.blit(fondv, (fond_x, 0))
-        pygame.display.flip()
-        screen.blit(envelo, (512, 505))
-        pygame.display.flip()
+    VELO_FS = [pygame.image.load((os.path.dirname(__file__) + "/sprites/images/VELO_F1.png")),
+               pygame.image.load((os.path.dirname(__file__) + "/sprites/images/VELO_F2.png")),
+               pygame.image.load((os.path.dirname(__file__) + "/sprites/images/VELO_F3.png"))]
+    IMG_FONDV = pygame.image.load((os.path.dirname(__file__) + "/sprites/images/fondv.png"))
+        
+    def getNbStep(self, level):
+        return 2*level + 10
 
 
     def run_miniJeu(self):
         pygame.init()
+        self.screen = pygame.display.set_mode((1024, 768))
         #Timer
+
         clock = pygame.time.Clock()
         timer = 0
-        max_time = 30#Utils.getMaxTimeForLevel(10,self.m_level)
+        MAX_TIME = Utils.getMaxTimeForLevel(10,self.m_level)
+        TIMER_WIDTH = 600
+        mid_x = self.screen.get_width() / 2
+        mid_y = self.screen.get_height() / 2
+
+        velo_frame = 0
+
         #Variables
         click = True
-        parcours, ARRIVEE = 0, 20
-        fond_x = 0
-        fondv = pygame.image.load("./src/assets/fondv.png")
-        tombe = pygame.image.load("./src/assets/tombe.png")
-        envelo = pygame.image.load("./src/assets/envelo.png")
+        parcours, ARRIVEE = 0, self.getNbStep(self.m_level)
+        LONGUEUR_PAS = 50
+        fond_x = -10000-(ARRIVEE * LONGUEUR_PAS)
 
-        # Initialisation de l'écran
-        screen = pygame.display.set_mode((1024, 768))
+        while parcours<ARRIVEE and timer < MAX_TIME:
 
-        while parcours<ARRIVEE and timer < max_time:
-
-            screen.blit(fondv, (fond_x, 0))
-            screen.blit(envelo, (512, 505))
+            self.screen.blit(mj_velo.IMG_FONDV, (fond_x, 0))
+            self.screen.blit(mj_velo.VELO_FS[velo_frame % 3], (0, self.screen.get_height() - 200))
             
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if (event.key==pygame.K_a and click) or (event.key==pygame.K_z and not click):
                         click = not click
                         parcours+=1
-                        fond_x -= 50
-                        screen.blit(fondv,(fond_x,0))
-                    else:
-                        self.erreur(screen)
+                        fond_x -= LONGUEUR_PAS
+                        self.screen.blit(mj_velo.IMG_FONDV,(fond_x,0))
+                        velo_frame += 1
+                    # else:
+                    #     self.erreur(screen)
 
-                    print(f"Touche : {event.key}")
-            pygame.display.update()
+            barre_w = TIMER_WIDTH * (1-(timer/MAX_TIME))
+            loading_bar_rect = pygame.Rect(mid_x-(TIMER_WIDTH/2), mid_y-250, barre_w, 20)
+            pygame.draw.rect(self.screen, "red", loading_bar_rect, 0)
+            pygame.draw.rect(self.screen, (0,0,0, 120), loading_bar_rect, 4)
+
+            pygame.display.flip()
             timer += clock.tick(30)/1000
         return (parcours == ARRIVEE)         
 

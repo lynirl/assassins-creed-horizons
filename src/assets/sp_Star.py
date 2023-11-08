@@ -1,8 +1,8 @@
 import pygame
 import os
 class Star(pygame.sprite.Sprite):
-    good_path = "./src/assets/sprites/images/stars_w.png"
-    bad_path = "./src/assets/sprites/images/stars.png"
+    good_path = os.path.dirname(__file__) + "/sprites/images/stars_w.png"
+    bad_path = os.path.dirname(__file__) + "/sprites/images/stars.png"
 
     def __init__(self, x, y, right = False):
         pygame.sprite.Sprite.__init__(self)

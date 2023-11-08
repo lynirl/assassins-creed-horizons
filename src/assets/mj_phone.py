@@ -27,21 +27,26 @@ class mj_Phone():
 
 
         #barre de distraction
-        progressBarMin = 0
-        progressBarMax = 500
+        PROGRESSMIN = 0
+        PROGRESSMAX = 500
         progressBar = 0
-        bar_height = 5
+        bar_height = 50
         
         #items
         bg = pygame.image.load("./src/assets/sprites/images/classroom_1.png")
         teach = sp_Teacher.Teacher()
         student = sp_Teacher.Student()
+        bureau = sp_Teacher.Bureau()
 
         #sprite groups
-        sprite_teacher = pygame.sprite.Group()
+    
+        sprite_teach = pygame.sprite.Group()
         sprite_student = pygame.sprite.Group()
-        sprite_teacher.add(teach)
+        sprite_bureau = pygame.sprite.Group()
+        
+        sprite_teach.add(teach)
         sprite_student.add(student)
+        sprite_bureau.add(bureau)
 
         #-----------------------------------
 
@@ -50,24 +55,26 @@ class mj_Phone():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                 if event.type == pygame.MOUSEBUTTONDOWN: #utiliser téléphone ou pas
+                    sprite_student.draw(screen)
                     student.phoneOut = True
+
                 if event.type == pygame.MOUSEBUTTONUP:
                     student.phoneOut = False
             if student.phoneOut: #si on utilise le téléphone ça augmente progressBar
-                progressBar += 200
+                progressBar += 100
 
             #-----------------------------------
             screen.blit(bg, (0, 0)) #la classe en background
-            sprite_student.draw(screen) #spawnez svp
-            sprite_teacher.update()
-            sprite_teacher.draw(screen)
+            
+            sprite_teach.draw(screen) #spawnez svp
+            sprite_bureau.draw(screen)
 
             #tout pour la barre du timer
             barre_w = timer_width * (1-(timer/max_time))
             loading_bar_rect = pygame.Rect(mid_x-(timer_width/2), mid_y-300, barre_w, 20)
 
             #barre de distraction
-            barre_d = -(bar_height * (1-(progressBar/progressBarMax))) #calculer sa hauteur (+ parce que sinon ça va dans l'autre sens.......)
+            barre_d = -(bar_height * (1-(progressBar/PROGRESSMAX))) #calculer sa hauteur (+ parce que sinon ça va dans l'autre sens.......)
             dis_rect = pygame.Rect(50, 200, 20, barre_d) #son rectangle associé
 
 
@@ -75,7 +82,7 @@ class mj_Phone():
             pygame.draw.rect(self.screen, "red", loading_bar_rect)
 
             #affiche la barre de distraction
-            pygame.draw.rect(self.screen, "white", dis_rect)
+            pygame.draw.rect(self.screen, "blue", dis_rect)
             
             #-----------------------------------
 
@@ -89,17 +96,18 @@ class mj_Phone():
 
 
             #gérer que le prof se retourne
-            teacherChance = random.randint(1,100)
-            if teacherChance == 3:
-                teach.isWatching = True #il se retourne attention!!
+            teacherChance = random.randint(0,100)
+            if teacherChance == 3 and teach.isWatching == False:
+                sprite_teach.update()
+                print("AYAYAYAYAYAYA")
 
             #si phone est sorti et le teacher regarde
             #if (student.phoneOut == True and teach.isWatching == True):
                 #return False #c'est TERMINE
 
             #décrémenter la barre si on est pas déja au minimum
-            if progressBar > progressBarMin:
-                progressBar -= 100
+            if progressBar > PROGRESSMIN:
+                progressBar -= 50
 
         return False
     
