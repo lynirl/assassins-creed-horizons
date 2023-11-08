@@ -34,7 +34,6 @@ class mj_carte():
                                   (MID_X + 125, SLIDE_HEIGHT), (MID_X + 350, SLIDE_HEIGHT))
         
         swipeRectA = mj_carte.SWIPE_A[0].get_rect()
-        print(id(swipeRectA))
         swipeRectA.centerx = (MID_X)
         swipeRectA.bottom = (SLIDE_HEIGHT)
 
@@ -68,12 +67,12 @@ class mj_carte():
                     if (checkpoints.index == len(checkpoints.liste)):
                         return True
 
-            self.screen.fill("black")
-            screen.blit(mj_carte.SWIPE_A[0], swipeRectA)
+            self.screen.fill((31,31,31))
+            self.screen.blit(mj_carte.SWIPE_A[0], swipeRectA)
             # for cp in checkpoints.liste:
             #     pygame.draw.rect(screen, ("white"), cp)
             sprite_group.draw(self.screen)
-            screen.blit(mj_carte.SWIPE_B, swipeRectB)
+            self.screen.blit(mj_carte.SWIPE_B, swipeRectB)
 
             barre_w = TIMER_WIDTH * (1-(timer/MAX_TIME))
             loading_bar_rect = pygame.Rect(MID_X-(TIMER_WIDTH/2), MID_Y-250, barre_w, 20)
