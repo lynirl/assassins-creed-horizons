@@ -1,14 +1,14 @@
-from AbstractMiniJeu import AbstractMiniJeu
 import pygame
 from sp_Carte import Carte
 import random
 import Utils
 from Checkpoints import Checkpoint
 
-class mj_carte(AbstractMiniJeu):
+class mj_carte():
 
-    def __init__(self, level):
+    def __init__(self, level, screen):
         self.m_level = level
+        self.screen = screen
 
     def run_miniJeu(self):
         success = False
@@ -17,8 +17,8 @@ class mj_carte(AbstractMiniJeu):
         max_time = Utils.getMaxTimeForLevel(10, self.m_level)
         timer_width = 600
         
-        mid_x = screen.get_width() / 2
-        mid_y = screen.get_height() / 2
+        mid_x = self.screen.get_width() / 2
+        mid_y = self.screen.get_height() / 2
 
         sprite_group = pygame.sprite.Group()
         carte = Carte(mid_x, mid_y-100)
@@ -55,14 +55,14 @@ class mj_carte(AbstractMiniJeu):
                     if (checkpoints.index == len(checkpoints.liste)):
                         return True
 
-            screen.fill("black")
+            self.screen.fill("black")
             # for cp in checkpoints.liste:
             #     pygame.draw.rect(screen, ("white"), cp)
-            sprite_group.draw(screen)
+            sprite_group.draw(self.screen)
 
             barre_w = timer_width * (1-(timer/max_time))
             loading_bar_rect = pygame.Rect(mid_x-(timer_width/2), mid_y-250, barre_w, 20)
-            pygame.draw.rect(screen, "red", loading_bar_rect)
+            pygame.draw.rect(self.screen, "red", loading_bar_rect)
             
             
             pygame.display.update()

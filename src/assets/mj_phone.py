@@ -1,10 +1,10 @@
-from AbstractMiniJeu import AbstractMiniJeu
 import pygame
 
-class mj_Phone(AbstractMiniJeu):
+class mj_Phone():
 
-    def __init__(self, level):
+    def __init__(self, level, screen):
         self.m_level = level
+        self.screen = screen
     
     def run_miniJeu(self):
 
@@ -21,8 +21,8 @@ class mj_Phone(AbstractMiniJeu):
         timer_width = 600
 
         #coords du timer
-        mid_x = screen.get_width() / 2
-        mid_y = screen.get_height() / 2
+        mid_x = self.screen.get_width() / 2
+        mid_y = self.screen.get_height() / 2
 
 
         #barre de distraction
@@ -42,7 +42,7 @@ class mj_Phone(AbstractMiniJeu):
                 if event.type == pygame.MOUSEBUTTONDOWN: #pour augmenter progressBar
                     progressBar += 10
                 
-            screen.fill("black") #la couleur de fond pour actualiser
+            self.screen.fill("black") #la couleur de fond pour actualiser
             
             #tout pour la barre du timer
             barre_w = timer_width * (1-(timer/max_time))
@@ -54,10 +54,10 @@ class mj_Phone(AbstractMiniJeu):
 
 
             #affiche la barre du timer
-            pygame.draw.rect(screen, "red", loading_bar_rect)
+            pygame.draw.rect(self.screen, "red", loading_bar_rect)
 
             #affiche la barre de distraction
-            pygame.draw.rect(screen, "white", dis_rect)
+            pygame.draw.rect(self.screen, "white", dis_rect)
             
 
             #60 fps

@@ -1,11 +1,10 @@
-from AbstractMiniJeu import AbstractMiniJeu
 import pygame
 from sp_Star import Star
 import random
 import Utils
 
 
-class mj_crous(AbstractMiniJeu):
+class mj_crous():
 
     def __init__(self, level, screen):
         self.m_level = level
