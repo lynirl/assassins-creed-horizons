@@ -1,12 +1,16 @@
 import pygame
-from sp_Carte import Carte
+import os
 import random
 import Utils
+from sp_Carte import Carte
 from Checkpoints import Checkpoint
 
 class mj_carte():
+    SWIPE_A = [pygame.image.load(os.path.dirname(__file__) + "/sprites/images/cardswipe/aSwipe.png"),
+               pygame.image.load(os.path.dirname(__file__) + "/sprites/images/cardswipe/aSwipeOK.png")]
 
-    def __init__(self, level, screen):
+    SWIPE_B = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/cardswipe/bSwipe.png")
+    def __init__(self, level, screen = pygame.display.set_mode((1024, 768))):
         self.m_level = level
         self.screen = screen
 
@@ -14,22 +18,31 @@ class mj_carte():
         success = False
         clock = pygame.time.Clock()
         timer = 0
-        max_time = Utils.getMaxTimeForLevel(10, self.m_level)
-        timer_width = 600
+        MAX_TIME = Utils.getMaxTimeForLevel(10, self.m_level)
+        TIMER_WIDTH = 600
         
-        mid_x = self.screen.get_width() / 2
-        mid_y = self.screen.get_height() / 2
+        MID_X = 1024 / 2
+        MID_Y = 768 / 2
 
         sprite_group = pygame.sprite.Group()
-        carte = Carte(mid_x, mid_y-100)
+        carte = Carte(MID_X, MID_Y-100)
         sprite_group.add(carte)
 
-        slide_height = mid_y + 150
+        SLIDE_HEIGHT = MID_Y + 150
 
-        checkpoints = Checkpoint((mid_x - 350, slide_height),(mid_x - 125, slide_height),
-                                  (mid_x + 125, slide_height), (mid_x + 350, slide_height))
+        checkpoints = Checkpoint((MID_X - 350, SLIDE_HEIGHT),(MID_X - 125, SLIDE_HEIGHT),
+                                  (MID_X + 125, SLIDE_HEIGHT), (MID_X + 350, SLIDE_HEIGHT))
+        
+        swipeRectA = mj_carte.SWIPE_A[0].get_rect()
+        print(id(swipeRectA))
+        swipeRectA.centerx = (MID_X)
+        swipeRectA.bottom = (SLIDE_HEIGHT)
 
-        while (timer < max_time):
+        swipeRectB = mj_carte.SWIPE_B.get_rect()
+        swipeRectB.centerx = (MID_X)
+        swipeRectB.top = (SLIDE_HEIGHT)
+
+        while (timer < MAX_TIME):
             for event in pygame.event.get():
                 if (event.type == pygame.MOUSEBUTTONDOWN and event.button == 1) and carte.rect.collidepoint(event.pos) and not carte.drag:
                     mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -39,12 +52,12 @@ class mj_carte():
                 elif (event.type == pygame.MOUSEBUTTONUP and event.button == 1):
                         carte.drag = False
                         if (not success):
-                            carte.rect.center = (mid_x, mid_y-100)     
+                            carte.rect.center = (MID_X, MID_Y-100)     
 
                 elif (event.type == pygame.MOUSEMOTION and carte.drag):
                         mouse_x, mouse_y = pygame.mouse.get_pos()
-                        if (abs(slide_height - mouse_y) < 75):
-                            carte.rect.center = (mouse_x, slide_height)
+                        if (abs(SLIDE_HEIGHT - mouse_y) < 75):
+                            carte.rect.center = (mouse_x, SLIDE_HEIGHT)
                         else:
                             carte.rect.center = (mouse_x, mouse_y)
                             checkpoints.index = 0
@@ -56,12 +69,14 @@ class mj_carte():
                         return True
 
             self.screen.fill("black")
+            screen.blit(mj_carte.SWIPE_A[0], swipeRectA)
             # for cp in checkpoints.liste:
             #     pygame.draw.rect(screen, ("white"), cp)
             sprite_group.draw(self.screen)
+            screen.blit(mj_carte.SWIPE_B, swipeRectB)
 
-            barre_w = timer_width * (1-(timer/max_time))
-            loading_bar_rect = pygame.Rect(mid_x-(timer_width/2), mid_y-250, barre_w, 20)
+            barre_w = TIMER_WIDTH * (1-(timer/MAX_TIME))
+            loading_bar_rect = pygame.Rect(MID_X-(TIMER_WIDTH/2), MID_Y-250, barre_w, 20)
             pygame.draw.rect(self.screen, "red", loading_bar_rect)
             
             
