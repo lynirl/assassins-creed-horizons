@@ -1,4 +1,5 @@
 import pygame
+import math
 import random
 import Utils
 import os
@@ -6,10 +7,12 @@ import os
 import sp_PhonesSprites as sp_PhonesSprites
 
 class mj_Phone():
-
     def __init__(self, level, screen):
         self.m_level = level
         self.screen = screen
+
+    def getTimeForLevelPhone(self, level):
+        return ((math.e ** (2.75 - (0.075 * level))) * 0.6) + 10
     
     def run_miniJeu(self):
 
@@ -19,7 +22,8 @@ class mj_Phone():
 
         
         #temps écoulé et temps max
-        max_time = Utils.getMaxTimeForLevel(20, self.m_level)
+        #max_time = Utils.getMaxTimeForLevel(20, self.m_level)
+        max_time = self.getTimeForLevelPhone(self.m_level)
         timer = 0
         TIMER_WIDTH = 600
         STEP = 75
@@ -82,7 +86,7 @@ class mj_Phone():
 
             #Spotted
             if (teach.isWatching and student.phoneOut):
-                currProgress -= 150
+                currProgress -= 200
                 if (currProgress < PROGRESSMIN):
                     currProgress = PROGRESSMIN
 

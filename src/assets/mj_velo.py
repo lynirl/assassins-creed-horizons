@@ -29,7 +29,6 @@ class mj_velo():
         clock = pygame.time.Clock()
         timer = 0
         MAX_TIME = self.getTimeForLevelVelo(self.m_level)
-        print(MAX_TIME)
         TIMER_WIDTH = 600
         MID_X = self.screen.get_width() / 2
         MID_Y = self.screen.get_height() / 2
@@ -42,7 +41,6 @@ class mj_velo():
         ARRIVEE = self.getNbStep(self.m_level)
         LONGUEUR_PAS = 75
         fond_x = -mj_velo.IMG_FONDV.get_rect().width + (ARRIVEE * LONGUEUR_PAS) + 1300
-        print(ARRIVEE)
 
         while parcours<ARRIVEE and timer < MAX_TIME:
 
