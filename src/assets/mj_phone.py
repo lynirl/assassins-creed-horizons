@@ -43,7 +43,7 @@ class mj_Phone():
         #items
         BG = pygame.image.load("./src/assets/sprites/images/phone/classroom_1.png")
         teach = sp_PhonesSprites.Teacher(570, 200)
-        student = sp_PhonesSprites.Student(MID_X - 15, MID_Y + 82)
+        student = sp_PhonesSprites.Student(MID_X - 23, MID_Y + 64)
         bureau = sp_PhonesSprites.Bureau(MID_X - 61, MID_Y - 134)
 
         #sprite groups
