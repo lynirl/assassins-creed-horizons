@@ -34,7 +34,7 @@ class mj_Phone():
         bar_height = 50
         
         #items
-        bg = pygame.image.load("./src/assets/sprites/images/classroom_1.png")
+        bg = pygame.image.load("./src/assets/sprites/images/phone/classroom_1.png")
         teach = sp_Teacher.Teacher()
         student = sp_Teacher.Student()
         bureau = sp_Teacher.Bureau()
