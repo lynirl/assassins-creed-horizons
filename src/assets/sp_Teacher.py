@@ -10,7 +10,7 @@ class Teacher(pygame.sprite.Sprite):
         self.rect.center = ((1024 / 2) - 61, (768 / 2) - 200)
         self.isWatching = False
 
-    def update(self): #TODO: a revérifier
+    def update(self): #TODO: nul
         while(self.duree < 200):
             #quand il se retourne il bouge
             self.isWatching = True
@@ -27,7 +27,7 @@ class Student(pygame.sprite.Sprite):
         self.image = pygame.image.load("./src/assets/sprites/images/phone/student.png")
 
         self.rect = self.image.get_rect()
-        self.rect.center = ((1024 / 2) - 14, (768 / 2) + 68) #position du sprite
+        self.rect.center = ((1024 / 2) - 15, (768 / 2) + 82) #position du sprite
         self.phoneOut = False
 
 class Bureau(pygame.sprite.Sprite):

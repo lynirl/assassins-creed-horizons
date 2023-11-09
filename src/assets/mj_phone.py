@@ -69,6 +69,7 @@ class mj_Phone():
             
             sprite_teach.draw(screen) #spawnez svp
             sprite_bureau.draw(screen)
+            sprite_student.draw(screen)
 
             #tout pour la barre du timer
             barre_w = timer_width * (1-(timer/max_time))
