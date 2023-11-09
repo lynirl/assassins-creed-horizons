@@ -13,6 +13,7 @@ from mj_alarmClock import mj_alarmClock
 from mj_velo import mj_velo
 from mj_phone import mj_Phone
 warnings.filterwarnings("ignore", "libpng warning: iCCP: known incorrect sRGB profile",category=RuntimeWarning)
+transitions = True
 
 def startMenu(a_screen):
     # Charger le son au format MP3
@@ -85,7 +86,8 @@ def main():
     vies = 3
 
 
-    while (round < 10 and vies > 0):
+    
+    while (round < 20 and vies > 0):
         mini_jeux = [mj_alarmClock(round, screen),
                      mj_velo(round, screen),
                      mj_Phone(round, screen),
@@ -94,9 +96,10 @@ def main():
         
         i = 0
         while (i < len(mini_jeux) and vies > 0):
-            screen.blit(IMG_CHARGEMENTS[5 - len(mini_jeux)], (0,0))
-            pygame.display.flip()
-            pygame.time.wait(3000)
+            if (transitions):
+                screen.blit(IMG_CHARGEMENTS[5 - len(mini_jeux)], (0,0))
+                pygame.display.flip()
+                pygame.time.wait(3000)
             screen.fill("black")
             if (mini_jeux[i].run_miniJeu()):
                 Utils.play_sound_effect(pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/main_succes.mp3")) #son succès
@@ -122,7 +125,8 @@ def main():
                 vies -=1
             del(mini_jeux[i])
             # i+=1
-        round +=1
+        round +=2
+        
     #plus de musique   
     CHANNEL_1.stop()
     CHANNEL_2.stop()
@@ -130,10 +134,11 @@ def main():
     screen.blit(IMG_GAMEOVER,(0,0))
 
     font = pygame.font.Font(None, 50)
-    scoreTexte = font.render(f"Votre score est de :{score}", True, "white")
+    scoreTexte = font.render(f"Votre score est de : {score}", True, "white")
     #scoreRect = scoreTexte.get_rect(center=(MID_X, MID_Y))
-    screen.blit(scoreTexte, scoreTexte.get_rect(center=(MID_X, MID_Y)))
-    
+    screen.blit(scoreTexte, scoreTexte.get_rect(center=(MID_X, MID_Y-75)))
+    #TODO SON POUR LE GAMEOVER
+
     quitButton = Button(MID_X, MID_Y+250, "QUITTER", "red")
     sprite_group = pygame.sprite.Group(quitButton)
     while (True):
@@ -175,8 +180,8 @@ if __name__ == "__main__":
 
                 pygame.time.wait(3000)
 
-            if arg.lower() == "sources":
-                print("World !")
+            if arg.lower() == "notransition":
+                transitions = False
         
     if (startMenu(screen) == 1):
         pygame.quit()
