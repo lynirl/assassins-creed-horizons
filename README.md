@@ -1,5 +1,8 @@
 # assassins-creed-horizons
 GameJam Python 2023
+## Arguments:
+- credits : affiche les credits
+- notransitions : Caches les transitions
 
 ## SOURCES : 
 ### Images :
