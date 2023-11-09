@@ -2,6 +2,7 @@ import pygame
 import os
 class Vie(pygame.sprite.Sprite):
     def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
         self.C_X = x
         self.C_Y = y
         self.image = pygame.image.load("./src/assets/sprites/images/heart.png")

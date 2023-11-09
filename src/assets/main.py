@@ -100,6 +100,17 @@ def main():
     round = 1
     vies = 3
 
+    #sprites des vies
+    vie1 = sp_Vie.Vie(50,50)
+    vie2 = sp_Vie.Vie(120,50)
+    vie3 = sp_Vie.Vie(190,50)
+
+    #groupes des vies (séparés car actions différentes)
+    grp_vie = pygame.sprite.Group()
+    grp_vie.add(vie1)
+    grp_vie.add(vie2)
+    grp_vie.add(vie3)
+
 
     
     while (round < 20 and vies > 0):
@@ -113,6 +124,7 @@ def main():
         while (i < len(mini_jeux) and vies > 0):
             if (transitions):
                 screen.blit(IMG_CHARGEMENTS[5 - len(mini_jeux)], (0,0))
+                grp_vie.draw(screen)
                 pygame.display.flip()
                 pygame.time.wait(3000)
             screen.fill("black")
@@ -138,6 +150,11 @@ def main():
                     pygame.display.flip()
                 pygame.time.wait(500)
                 vies -=1
+                #système un peu moche pour gérer l'affichage des vies
+                if vies == 2:
+                    vie3.kill()
+                elif vies == 1:
+                    vie2.kill()
             del(mini_jeux[i])
             # i+=1
         round +=2
