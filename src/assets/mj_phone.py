@@ -27,8 +27,9 @@ class mj_Phone():
 
 
         #barre de distraction
-        PROGRESSMIN = 0
+        PROGRESSMIN = 0 #constantes min et max
         PROGRESSMAX = 500
+        
         progressBar = 0
         bar_height = 50
         
@@ -98,8 +99,9 @@ class mj_Phone():
             #gérer que le prof se retourne
             teacherChance = random.randint(0,100)
             if teacherChance == 3 and teach.isWatching == False:
-                sprite_teach.update()
                 print("AYAYAYAYAYAYA")
+                sprite_teach.update()
+            
 
             #si phone est sorti et le teacher regarde
             #if (student.phoneOut == True and teach.isWatching == True):

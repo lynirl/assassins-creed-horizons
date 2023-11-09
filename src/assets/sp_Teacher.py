@@ -9,6 +9,17 @@ class Teacher(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = ((1024 / 2) - 61, (768 / 2) - 200)
         self.isWatching = False
+
+    def update(self): #TODO: a revérifier
+        while(self.duree < 200):
+            #quand il se retourne il bouge
+            self.isWatching = True
+            self.rect.center = ((1024 / 2) - 250, (768 / 2) - 200)
+            self.duree+=1
+        #il revient a la normale
+        self.rect.center = ((1024 / 2) - 61, (768 / 2) - 200)
+        self.isWatching = False
+        
     
 class Student(pygame.sprite.Sprite):
     def __init__(self):
