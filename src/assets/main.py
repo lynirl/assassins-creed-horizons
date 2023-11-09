@@ -46,7 +46,6 @@ def startMenu(a_screen):
                 if (event.type == pygame.MOUSEBUTTONDOWN and startButton.rect.collidepoint(pygame.mouse.get_pos())):
                         inMenu = False
                         btnId = id(startButton)
-
                 elif (event.type == pygame.MOUSEBUTTONDOWN and quitButton.rect.collidepoint(pygame.mouse.get_pos())):
                         inMenu = False
                         btnId = id(quitButton)
@@ -68,6 +67,12 @@ def startMenu(a_screen):
 def main():
     IMG_SUCCESS = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/succes.png")
     IMG_ECHEC = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/explosion.png")
+    IMG_CHARGEMENTS = [pygame.image.load(os.path.dirname(__file__) + "/sprites/images/transition/tr_lit.png"),
+                       pygame.image.load(os.path.dirname(__file__) + "/sprites/images/transition/tr_velo.png"),
+                       pygame.image.load(os.path.dirname(__file__) + "/sprites/images/transition/tr_phone.png"),
+                       pygame.image.load(os.path.dirname(__file__) + "/sprites/images/transition/tr_crous.png"),
+                       pygame.image.load(os.path.dirname(__file__) + "/sprites/images/transition/tr_velo2.png")]
+    IMG_GAMEOVER = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/transition/gameover.png")
     MID_X = 1024 / 2
     MID_Y = 768 / 2
     CLOCK = pygame.time.Clock()
@@ -86,11 +91,10 @@ def main():
         
         i = 0
         while (i < len(mini_jeux) and vies > 0):
+            screen.blit(IMG_CHARGEMENTS[5 - len(mini_jeux)], (0,0))
+            pygame.display.flip()
+            pygame.time.wait(3000)
             screen.fill("black")
-            # for alpha in range(0, 255, 5):
-            #         screen.fill((255,255,255, alpha))
-            #         pygame.display.flip()
-
             if (mini_jeux[i].run_miniJeu()):
                 for j in range(400, 650, 20):
                     img_temp = pygame.transform.scale(IMG_SUCCESS, (j, j))
@@ -100,6 +104,7 @@ def main():
                     CLOCK.tick(60)
                     pygame.display.flip()
                 pygame.time.wait(500)
+                score += 1
             else:
                 for j in range(1, 10):
                     img_temp = pygame.transform.scale(IMG_ECHEC, ((j/10) *900, (j/10) *900))
@@ -111,15 +116,25 @@ def main():
                 pygame.time.wait(500)
                 vies -=1
             del(mini_jeux[i])
-            score += 1
             # i+=1
         round +=1
+    screen.blit(IMG_GAMEOVER,(0,0))
 
-            
-        
+    font = pygame.font.Font(None, 50)
+    scoreTexte = font.render(f"Votre score est de :{score}", True, "white")
+    #scoreRect = scoreTexte.get_rect(center=(MID_X, MID_Y))
+    screen.blit(scoreTexte, scoreTexte.get_rect(center=(MID_X, MID_Y)))
+    #TODO SON POUR LE GAMEOVER
 
-    pygame.quit()
-    print("Cya")
+    quitButton = Button(MID_X, MID_Y+250, "QUITTER", "red")
+    sprite_group = pygame.sprite.Group(quitButton)
+    while (True):
+        for event in pygame.event.get():
+            if (event.type == pygame.MOUSEBUTTONDOWN and quitButton.rect.collidepoint(pygame.mouse.get_pos())):
+                return True
+        sprite_group.draw(screen)
+        pygame.display.update()
+        CLOCK.tick(30)
 
 
 
@@ -127,6 +142,7 @@ if __name__ == "__main__":
     pygame.init()
     pygame.mixer.init()
     screen = pygame.display.set_mode((1024, 768))
+    pygame.display.set_caption("Stuck in the loop")
     if (len(sys.argv) > 0):
         for arg in sys.argv:
             if arg.lower() == "credits":
@@ -135,14 +151,14 @@ if __name__ == "__main__":
                 texte_lines = [
                     "Elisée Chemin - Chef de projet, Lead programmer",
                     "Rachel Peretti - Programmer",
-                    "Tom Jochum Faure- Artist",
+                    "Tom Jochum Faure - Artist, Programmer",
                     "Fantine Comparin - Programmer, Artist"]
 
                 # Afficher le texte initial
                 y_offset = 50           
                 for line in texte_lines:
                     texte_surface = font.render(line, True, "white")
-                    texte_rect = texte_surface.get_rect(center=(screen.get_width() // 2, y_offset))
+                    texte_rect = texte_surface.get_rect(center=(screen.get_width() / 2, y_offset))
                     screen.blit(texte_surface, texte_rect)
                     y_offset += 50
                     pygame.display.flip()
@@ -157,6 +173,7 @@ if __name__ == "__main__":
         sys.exit
     else:
         main()
+    pygame.quit()
 
 
 
