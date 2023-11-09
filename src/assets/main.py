@@ -129,10 +129,11 @@ def main():
     screen.blit(IMG_GAMEOVER,(0,0))
 
     font = pygame.font.Font(None, 50)
-    scoreTexte = font.render(f"Votre score est de :{score}", True, "white")
+    scoreTexte = font.render(f"Votre score est de : {score}", True, "white")
     #scoreRect = scoreTexte.get_rect(center=(MID_X, MID_Y))
-    screen.blit(scoreTexte, scoreTexte.get_rect(center=(MID_X, MID_Y)))
-    
+    screen.blit(scoreTexte, scoreTexte.get_rect(center=(MID_X, MID_Y-75)))
+    #TODO SON POUR LE GAMEOVER
+
     quitButton = Button(MID_X, MID_Y+250, "QUITTER", "red")
     sprite_group = pygame.sprite.Group(quitButton)
     while (True):
