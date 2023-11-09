@@ -62,8 +62,10 @@ def startMenu(a_screen):
 
 def main():
     #channels pour pouvoir les arrêter a tout moment (on en utilise maximum 2)
+    THEME = pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/MAIN_THEME.mp3")
     CHANNEL_1 = pygame.mixer.Channel(1)
     CHANNEL_2 = pygame.mixer.Channel(2)
+    CHANNEL_1.play(THEME, loops=-1)
 
     IMG_SUCCESS = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/succes.png")
     IMG_ECHEC = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/explosion.png")
@@ -130,8 +132,7 @@ def main():
     scoreTexte = font.render(f"Votre score est de :{score}", True, "white")
     #scoreRect = scoreTexte.get_rect(center=(MID_X, MID_Y))
     screen.blit(scoreTexte, scoreTexte.get_rect(center=(MID_X, MID_Y)))
-    #TODO SON POUR LE GAMEOVER
-
+    
     quitButton = Button(MID_X, MID_Y+250, "QUITTER", "red")
     sprite_group = pygame.sprite.Group(quitButton)
     while (True):

@@ -22,11 +22,6 @@ class mj_velo():
         pygame.init()
         self.screen = pygame.display.set_mode((1024, 768))
 
-        #son!!
-        THEME = pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/MAIN_THEME.mp3")
-        CHANNEL_MJ = pygame.mixer.Channel(1)
-        CHANNEL_MJ.play(THEME, loops=-1)
-
         #Timer
         clock = pygame.time.Clock()
         timer = 0
