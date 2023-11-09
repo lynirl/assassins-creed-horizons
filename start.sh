@@ -1,2 +1,2 @@
-#!/usr/bin/bash
-python3 "./src/assets/main.py"
+#!/bin/bash
+python3 "./src/assets/main.py" $@

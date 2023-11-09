@@ -15,8 +15,11 @@ class mj_velo():
                pygame.image.load((os.path.dirname(__file__) + "/sprites/images/velo/velo3.png"))]
 
     def getNbStep(self, level):
-        return 2*level + 10
+        #return int( (-4 * math.e**(-0.2 * level)) + (0.6 * math.log(level, math.e)) + 20)
+        return int( (-4 * math.e**(-0.5 * level)) + (1.5 * math.log(level, math.e)) + 25)
 
+    def getTimeForLevelVelo(self, level):
+        return ((math.e ** (2.75 - (0.1 * level))) * 0.5 ) + 1
 
     def run_miniJeu(self):
         pygame.init()
@@ -25,18 +28,21 @@ class mj_velo():
         #Timer
         clock = pygame.time.Clock()
         timer = 0
-        MAX_TIME = Utils.getMaxTimeForLevel(10,self.m_level)
+        MAX_TIME = self.getTimeForLevelVelo(self.m_level)
+        print(MAX_TIME)
         TIMER_WIDTH = 600
-        mid_x = self.screen.get_width() / 2
-        mid_y = self.screen.get_height() / 2
+        MID_X = self.screen.get_width() / 2
+        MID_Y = self.screen.get_height() / 2
 
         velo_frame = 0
 
         #Variables
         click = True
-        parcours, ARRIVEE = 0, self.getNbStep(self.m_level)
-        LONGUEUR_PAS = 50
-        fond_x = -10000-(ARRIVEE * LONGUEUR_PAS)
+        parcours = 0
+        ARRIVEE = self.getNbStep(self.m_level)
+        LONGUEUR_PAS = 75
+        fond_x = -mj_velo.IMG_FONDV.get_rect().width + (ARRIVEE * LONGUEUR_PAS) + 1300
+        print(ARRIVEE)
 
         while parcours<ARRIVEE and timer < MAX_TIME:
 
@@ -55,7 +61,7 @@ class mj_velo():
                             velo_frame = 0
 
             barre_w = TIMER_WIDTH * (1-(timer/MAX_TIME))
-            loading_bar_rect = pygame.Rect(mid_x-(TIMER_WIDTH/2), mid_y-250, barre_w, 20)
+            loading_bar_rect = pygame.Rect(MID_X-(TIMER_WIDTH/2), MID_Y-250, barre_w, 20)
             pygame.draw.rect(self.screen, "red", loading_bar_rect, 0)
             pygame.draw.rect(self.screen, (0,0,0, 120), loading_bar_rect, 4)
 
