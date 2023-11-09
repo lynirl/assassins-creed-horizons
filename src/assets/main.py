@@ -1,5 +1,6 @@
 import pygame
 import os
+import time
 import warnings
 import sys
 import Utils
@@ -22,7 +23,15 @@ def startMenu(a_screen):
 
     MID_X = 1024 / 2
     MID_Y = 768 / 2
-    BG = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG0.png")
+    #BG = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG0.png")
+    BG = [pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG0.png"),
+          pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG1.png"),
+          pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG2.png"),
+          pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG3.png"),
+          pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG4.png"),
+          pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG5.png"),
+          pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG6.png"),
+          pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG7.png")]
     LOGO = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/logo.png")
     LOGO_RECT = LOGO.get_rect()
     LOGO_RECT.center = (MID_X, 200)
@@ -33,11 +42,16 @@ def startMenu(a_screen):
 
     CLOCK = pygame.time.Clock()
 
-    a_screen.blit(BG, (0,0))
-    screen.blit(LOGO, LOGO_RECT)
+    
     inMenu = True
+    curr_background = 0
     btnId = 0
     while (inMenu):
+        a_screen.blit(BG[curr_background], (0,0))
+        curr_background +=1
+        if (curr_background == len(BG)):
+            curr_background = 0
+        screen.blit(LOGO, LOGO_RECT)
         for event in pygame.event.get():
                 if (event.type == pygame.MOUSEBUTTONDOWN and startButton.rect.collidepoint(pygame.mouse.get_pos())):
                         CHANNEL_MM.stop() #arrêter le vent quand on démarre le jeu
@@ -48,7 +62,7 @@ def startMenu(a_screen):
                         btnId = id(quitButton)
         sprite_group.draw(a_screen)
         pygame.display.update()
-        CLOCK.tick(30)
+        CLOCK.tick(4)
     
     Utils.play_sound_effect(Button.SOUND)
     if (btnId ==  id(startButton)):
@@ -63,6 +77,7 @@ def startMenu(a_screen):
 
 def main():
     #channels pour pouvoir les arrêter a tout moment (on en utilise maximum 2)
+    TPS_DEBUT = time.time() 
     THEME = pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/MAIN_THEME.mp3")
     CHANNEL_1 = pygame.mixer.Channel(1)
     CHANNEL_2 = pygame.mixer.Channel(2)
@@ -132,9 +147,13 @@ def main():
     screen.blit(IMG_GAMEOVER,(0,0))
 
     font = pygame.font.Font(None, 50)
+    deltaTemps = int(time.time() - TPS_DEBUT)
     scoreTexte = font.render(f"Votre score est de : {score}", True, "white")
+    tempsTexte = font.render(f"Votre temps est de : {int(deltaTemps / 60)} min et {deltaTemps % 60}s", True, "white")
     #scoreRect = scoreTexte.get_rect(center=(MID_X, MID_Y))
-    screen.blit(scoreTexte, scoreTexte.get_rect(center=(MID_X, MID_Y-75)))
+    screen.blit(scoreTexte, scoreTexte.get_rect(center=(MID_X, 200)))
+    screen.blit(tempsTexte, tempsTexte.get_rect(center=(MID_X, 230)))
+
     #TODO SON POUR LE GAMEOVER
 
     quitButton = Button(MID_X, MID_Y+250, "QUITTER", "red")
