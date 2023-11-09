@@ -6,11 +6,13 @@ from sp_Carte import Carte
 from Checkpoints import Checkpoint
 
 class mj_carte():
-    SWIPE_A = [pygame.image.load(os.path.dirname(__file__) + "/sprites/images/cardswipe/aSwipe.png"),
-               pygame.image.load(os.path.dirname(__file__) + "/sprites/images/cardswipe/aSwipeOK.png")]
+    SWIPE_A = []
 
     SWIPE_B = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/cardswipe/bSwipe.png")
     def __init__(self, level, screen = pygame.display.set_mode((1024, 768))):
+        mj_carte.SWIPE_A = [pygame.image.load(os.path.dirname(__file__) + "/sprites/images/cardswipe/aSwipe.png"),
+                            pygame.image.load(os.path.dirname(__file__) + "/sprites/images/cardswipe/aSwipeOK.png")]
+        
         self.m_level = level
         self.screen = screen
 

@@ -1,43 +1,54 @@
 import pygame
 import os
+import warnings
+import sys
+from bouton import Button
 from mj_crous import mj_crous
 from mj_carte import mj_carte
 from mj_alarmClock import mj_alarmClock
 from mj_velo import mj_velo
+warnings.filterwarnings("ignore", "libpng warning: iCCP: known incorrect sRGB profile",category=RuntimeWarning)
 
 def startMenu(a_screen):
-    BG = [pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG0.png")]#,
-        #   pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG1.png"),
-        #   pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG2.png"),
-        #   pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG3.png"),
-        #   pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG4.png"),
-        #   pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG5.png"),
-        #   pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG6.png"),
-        #   pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG7.png")]
+    MID_X = 1024 / 2
+    MID_Y = 768 / 2
+    BG = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG0.png")
+    LOGO = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/logo.png")
+    LOGO_RECT = LOGO.get_rect()
+    LOGO_RECT.center = (MID_X, 200)
 
+    startButton = Button(MID_X, MID_Y+150, "START", "lime")
+    quitButton = Button(MID_X, MID_Y+250, "QUITTER", "red")
+    sprite_group = pygame.sprite.Group(startButton, quitButton)
+
+    CLOCK = pygame.time.Clock()
 
     inStartMenu = True
-    surf = pygame.surface.Surface((1024,768))
-    surf.fill("white")
-    frame = 0
-    time = 0
-    while(inStartMenu and time < 6):
-   
-        a_screen.blit(surf, (0,0))
-        if (frame == 2):
-            frame = 0
-        else:
-            frame+=1
-        time += pygame.time.Clock().tick(2) / 1000
-    
 
+    a_screen.blit(BG, (0,0))
+    screen.blit(LOGO, LOGO_RECT)
+    inMenu = True
+    while (inMenu):
+        for event in pygame.event.get():
+                if (event.type == pygame.MOUSEBUTTONDOWN and startButton.rect.collidepoint(pygame.mouse.get_pos())):
+                        inMenu = False
+                        return True
+                if (event.type == pygame.MOUSEBUTTONDOWN and startButton.rect.collidepoint(pygame.mouse.get_pos())):
+                        inMenu = False
+                        return False
+        sprite_group.draw(a_screen)
+        pygame.display.update()
+        CLOCK.tick(30)
+    
 
 
 
 def main():
     IMG_SUCCESS = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/succes.png")
+    IMG_ECHEC = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/explosion.png")
     MID_X = 1024 / 2
     MID_Y = 768 / 2
+    CLOCK = pygame.time.Clock()
     score = 0
     round = 1
     vies = 3
@@ -53,19 +64,32 @@ def main():
         i = 0
         while (i < len(mini_jeux) and vies > 0):
             screen.fill("black")
+            # for alpha in range(0, 255, 5):
+            #         screen.fill((255,255,255, alpha))
+            #         pygame.display.flip()
+
             if (mini_jeux[i].run_miniJeu()):
+                for j in range(400, 650, 20):
+                    img_temp = pygame.transform.scale(IMG_SUCCESS, (j, j))
+                    rect = img_temp.get_rect()
+                    rect.center = (MID_X, MID_Y)
+                    screen.blit(img_temp, rect)
+                    CLOCK.tick(60)
+                    pygame.display.flip()
+                pygame.time.wait(500)
+            else:
                 for j in range(1, 10):
-                    img_temp = pygame.transform.scale(IMG_SUCCESS, ((j/10) *900, (j/10) *900))
+                    img_temp = pygame.transform.scale(IMG_ECHEC, ((j/10) *900, (j/10) *900))
                     rect = img_temp.get_rect()
                     rect.center = (MID_X, MID_Y)
                     screen.blit(img_temp, rect)
                     pygame.time.Clock().tick(60)
                     pygame.display.flip()
                 pygame.time.wait(500)
-            else:
                 vies -=1
+            del(mini_jeux[i])
             score += 1
-            i+=1
+            # i+=1
         round +=1
 
             
@@ -79,5 +103,33 @@ def main():
 if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode((1024, 768))
-    startMenu(screen)
-    main()
+    if (len(sys.argv) > 0):
+        for arg in sys.argv:
+            if arg.lower() == "credits":
+                screen.fill("Black")
+                font = pygame.font.Font(None, 36)
+                texte_lines = [
+                    "Elisée Chemin - Chef de projet, Lead programmer",
+                    "Rachel Peretti - Programmer",
+                    "Tom Jochum Faure- Artist",
+                    "Fantine Comparin - Programmer, Artist"]
+
+                # Afficher le texte initial
+                y_offset = 50           
+                for line in texte_lines:
+                    texte_surface = font.render(line, True, "white")
+                    texte_rect = texte_surface.get_rect(center=(screen.get_width() // 2, y_offset))
+                    screen.blit(texte_surface, texte_rect)
+                    y_offset += 50
+                    pygame.display.flip()
+
+                pygame.time.wait(3000)
+
+            if arg.lower() == "sources":
+                print("World !")
+        
+    if (not startMenu(screen)):
+        pygame.quit()
+        sys.exit
+    else:
+        main()
