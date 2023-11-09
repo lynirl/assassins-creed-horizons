@@ -8,13 +8,19 @@ from mj_crous import mj_crous
 from mj_carte import mj_carte
 from mj_alarmClock import mj_alarmClock
 from mj_velo import mj_velo
+from mj_phone import mj_Phone
 warnings.filterwarnings("ignore", "libpng warning: iCCP: known incorrect sRGB profile",category=RuntimeWarning)
+def play_sound_effect(sound_effect):
+    effect_channel = pygame.mixer.find_channel(True)
+    if effect_channel:
+        effect_channel.play(sound_effect)
+
 
 def startMenu(a_screen):
     # Charger le son au format MP3
     MENU_THEME = pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/main-menu.mp3")
-    CHANNEL_MM.play(MENU_THEME,loops=-1)
     CHANNEL_MM = pygame.mixer.Channel(1)
+    CHANNEL_MM.play(MENU_THEME,loops=-1)
 
     MID_X = 1024 / 2
     MID_Y = 768 / 2
@@ -48,7 +54,7 @@ def startMenu(a_screen):
         pygame.display.update()
         CLOCK.tick(30)
     
-    Utils.play_sound_effect(Button.SOUND)
+    play_sound_effect(Button.SOUND)
     if (btnId ==  id(startButton)):
         return 0
     elif (btnId == id(quitButton)):
@@ -74,6 +80,7 @@ def main():
     while (round < 10 and vies > 0):
         mini_jeux = [mj_alarmClock(round, screen),
                      mj_velo(round, screen),
+                     mj_Phone(round, screen),
                      mj_carte(round,screen),
                      mj_crous(round, screen)]
         
@@ -150,3 +157,7 @@ if __name__ == "__main__":
         sys.exit
     else:
         main()
+
+
+
+

@@ -1,6 +1,7 @@
 import pygame
 import random
-import sp_Teacher
+import Utils
+import sp_PhonesSprites as sp_PhonesSprites
 
 class mj_Phone():
 
@@ -12,32 +13,32 @@ class mj_Phone():
 
         #clock du jeu
         clock = pygame.time.Clock()
-        
-        teacherChance = 0
+        teacherChance = 2
 
         
         #temps écoulé et temps max
-        max_time = 30
+        max_time = Utils.getMaxTimeForLevel(20, self.m_level)
         timer = 0
-        timer_width = 600
+        TIMER_WIDTH = 600
+        STEP = 75
 
         #coords du timer
-        mid_x = self.screen.get_width() / 2
-        mid_y = self.screen.get_height() / 2
+        MID_X = self.screen.get_width() / 2
+        MID_Y = self.screen.get_height() / 2
 
 
         #barre de distraction
         PROGRESSMIN = 0 #constantes min et max
-        PROGRESSMAX = 500
+        PROGRESSMAX = 9000
         
-        progressBar = 0
-        bar_height = 50
+        currProgress = 0
+        BARRE_MAX_HEIGHT = 400
         
         #items
-        bg = pygame.image.load("./src/assets/sprites/images/phone/classroom_1.png")
-        teach = sp_Teacher.Teacher()
-        student = sp_Teacher.Student()
-        bureau = sp_Teacher.Bureau()
+        BG = pygame.image.load("./src/assets/sprites/images/phone/classroom_1.png")
+        teach = sp_PhonesSprites.Teacher(570, 200)
+        student = sp_PhonesSprites.Student(MID_X - 15, MID_Y + 82)
+        bureau = sp_PhonesSprites.Bureau(MID_X - 61, MID_Y - 134)
 
         #sprite groups
     
@@ -52,44 +53,65 @@ class mj_Phone():
         #-----------------------------------
 
         while (timer < max_time): #tant que le jeu tourne
+            self.screen.blit(BG, (0, 0)) #la classe en background
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                if event.type == pygame.MOUSEBUTTONDOWN: #utiliser téléphone ou pas
-                    sprite_student.draw(screen)
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: #utiliser téléphone ou pas
                     student.phoneOut = True
 
-                if event.type == pygame.MOUSEBUTTONUP:
+                elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
                     student.phoneOut = False
+        
             if student.phoneOut: #si on utilise le téléphone ça augmente progressBar
-                progressBar += 100
+                sprite_student.draw(self.screen)
+                currProgress += STEP
+                if(currProgress > PROGRESSMAX):
+                    currProgress = PROGRESSMAX
+
+
 
             #-----------------------------------
-            screen.blit(bg, (0, 0)) #la classe en background
+            if currProgress > PROGRESSMIN and not student.phoneOut and not teach.isWatching:
+                currProgress -= STEP
+                if (currProgress < PROGRESSMIN):
+                    currProgress = PROGRESSMIN
+
+
+            #Spotted
+            if (teach.isWatching and student.phoneOut):
+                currProgress -= 150
+                #TODO : PLAYSOUND
+                if (currProgress < PROGRESSMIN):
+                    currProgress = PROGRESSMIN
+
+
             
-            sprite_teach.draw(screen) #spawnez svp
-            sprite_bureau.draw(screen)
-            sprite_student.draw(screen)
+            sprite_teach.draw(self.screen) #spawnez svp
+            sprite_bureau.draw(self.screen)
 
             #tout pour la barre du timer
-            barre_w = timer_width * (1-(timer/max_time))
-            loading_bar_rect = pygame.Rect(mid_x-(timer_width/2), mid_y-300, barre_w, 20)
-
-            #barre de distraction
-            barre_d = -(bar_height * (1-(progressBar/PROGRESSMAX))) #calculer sa hauteur (+ parce que sinon ça va dans l'autre sens.......)
-            dis_rect = pygame.Rect(50, 200, 20, barre_d) #son rectangle associé
-
-
+            barre_w = TIMER_WIDTH * (1-(timer/max_time))
+            loading_bar_rect = pygame.Rect(MID_X-(TIMER_WIDTH/2), MID_Y-300, barre_w, 20)
             #affiche la barre du timer
             pygame.draw.rect(self.screen, "red", loading_bar_rect)
+            pygame.draw.rect(self.screen, (0,0,0, 120), loading_bar_rect, 4)
 
+
+            #barre de distraction
+            barre_currHeight = (BARRE_MAX_HEIGHT * (currProgress/PROGRESSMAX)) #calculer sa hauteur (+ parce que sinon ça va dans l'autre sens.......)
+            dis_rect = pygame.Rect(50, 200, 20, barre_currHeight) #son rectangle associé
+            bg_distraction = pygame.Rect(50, 200, 20, BARRE_MAX_HEIGHT) #son rectangle associé
+            
             #affiche la barre de distraction
+            pygame.draw.rect(self.screen, "grey", bg_distraction)
             pygame.draw.rect(self.screen, "blue", dis_rect)
+            pygame.draw.rect(self.screen, "black", bg_distraction, 4)
             
             #-----------------------------------
 
             #60 fps
-            clock.tick(60)
+            clock.tick(30)
 
             pygame.display.flip()
             timer += (clock.tick(30)/1000) #incrémenter le timer
@@ -98,20 +120,11 @@ class mj_Phone():
 
 
             #gérer que le prof se retourne
-            teacherChance = random.randint(0,100)
-            if teacherChance == 3 and teach.isWatching == False:
-                print("AYAYAYAYAYAYA")
+            if random.randint(1,200) <= teacherChance or teach.isWatching == True:
                 sprite_teach.update()
             
-
-            #si phone est sorti et le teacher regarde
-            #if (student.phoneOut == True and teach.isWatching == True):
-                #return False #c'est TERMINE
-
-            #décrémenter la barre si on est pas déja au minimum
-            if progressBar > PROGRESSMIN:
-                progressBar -= 50
-
+            if (currProgress >= PROGRESSMAX):
+                return True
         return False
     
         #-----------------------------------
@@ -120,7 +133,7 @@ if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode((1024, 768))
 
-    obj = mj_Phone(1, screen)
+    obj = mj_Phone(10, screen)
     print("état:", obj.run_miniJeu())
 
     pygame.quit()

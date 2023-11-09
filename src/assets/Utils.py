@@ -12,7 +12,3 @@ def getMaxTimeForLevel(timeLvlZero, level):
         return 1
     return result
 
-def play_sound_effect(sound_effect):
-    effect_channel = pygame.mixer.find_channel(True)
-    if effect_channel:
-        effect_channel.play(sound_effect)
