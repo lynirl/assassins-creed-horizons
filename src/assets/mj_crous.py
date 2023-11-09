@@ -1,5 +1,6 @@
 import pygame
 import os
+import math
 from sp_Star import Star
 import random
 import Utils
@@ -8,6 +9,9 @@ import Utils
 class mj_crous():
     IMG_BG = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/crous/crous_fond.png")
 
+    def getTimeForLevelCrous(self, level):
+        return ((math.e ** (2.5 - (0.25 * level))) * 0.4) + 1.5
+    
     def __init__(self, level, screen):
         self.m_level = level
         self.screen = screen
@@ -23,7 +27,7 @@ class mj_crous():
         # framerate = Utils.getFramerateForLevel(60, self.m_level)
         clock = pygame.time.Clock()
         timer = 0
-        max_time = Utils.getMaxTimeForLevel(10,self.m_level)
+        max_time = self.getTimeForLevelCrous(self.m_level)
         timer_width = 600
         
 
