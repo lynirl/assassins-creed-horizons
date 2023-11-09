@@ -1,5 +1,6 @@
 import pygame
 import os
+import math
 import random
 import Utils
 from sp_Carte import Carte
@@ -16,6 +17,9 @@ class mj_carte():
         self.m_level = level
         self.screen = screen
 
+    def getTimeForLevelCarte(self, level):
+        return ((math.e ** (2.5 - (0.2 * level))) * 0.6) + 1
+
     def run_miniJeu(self):
 
         #son
@@ -23,7 +27,7 @@ class mj_carte():
         success = False
         clock = pygame.time.Clock()
         timer = 0
-        MAX_TIME = Utils.getMaxTimeForLevel(10, self.m_level)
+        MAX_TIME = self.getTimeForLevelCarte(self.m_level)
         TIMER_WIDTH = 600
         
         MID_X = 1024 / 2
@@ -99,9 +103,9 @@ if __name__ == "__main__":
     obj = mj_carte(1)
     print("Resultat du mini jeu: ", obj.run_miniJeu())
 
-    # for i in range(1,10):
-    #     obj = mj_crous(i)
-    #     print(f"Resultat du mini jeu: {obj.run_miniJeu()}")
+    # for i in range(1,20,2):
+    #     obj = mj_carte(i)
+    #     print(f"Resultat du mini jeu: {obj.run_miniJeu()} --> {i}")
 
 
     pygame.quit()

@@ -24,15 +24,8 @@ def startMenu(a_screen):
 
     MID_X = 1024 / 2
     MID_Y = 768 / 2
-    #BG = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG0.png")
-    BG = [pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG0.png"),
-          pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG1.png"),
-          pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG2.png"),
-          pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG3.png"),
-          pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG4.png"),
-          pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG5.png"),
-          pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG6.png"),
-          pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG7.png")]
+    BG = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG0.png")
+    
     LOGO = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/logo.png")
     LOGO_RECT = LOGO.get_rect()
     LOGO_RECT.center = (MID_X, 200)
@@ -42,17 +35,13 @@ def startMenu(a_screen):
     sprite_group = pygame.sprite.Group(startButton, quitButton)
 
     CLOCK = pygame.time.Clock()
+    a_screen.blit(BG, (0,0))
+    screen.blit(LOGO, LOGO_RECT)
 
-    
     inMenu = True
-    curr_background = 0
     btnId = 0
     while (inMenu):
-        a_screen.blit(BG[curr_background], (0,0))
-        curr_background +=1
-        if (curr_background == len(BG)):
-            curr_background = 0
-        screen.blit(LOGO, LOGO_RECT)
+        
         for event in pygame.event.get():
                 if (event.type == pygame.MOUSEBUTTONDOWN and startButton.rect.collidepoint(pygame.mouse.get_pos())):
                         CHANNEL_MM.stop() #arrêter le vent quand on démarre le jeu
@@ -197,24 +186,14 @@ if __name__ == "__main__":
     if (len(sys.argv) > 0):
         for arg in sys.argv:
             if arg.lower() == "credits":
-                screen.fill("Black")
-                font = pygame.font.Font(None, 36)
-                texte_lines = [
-                    "Elisée Chemin - Chef de projet, Lead programmer",
-                    "Rachel Peretti - Programmer",
-                    "Tom Jochum Faure - Artist, Programmer",
-                    "Fantine Comparin - Programmer, Artist"]
-
-                # Afficher le texte initial
-                y_offset = 50           
-                for line in texte_lines:
-                    texte_surface = font.render(line, True, "white")
-                    texte_rect = texte_surface.get_rect(center=(screen.get_width() / 2, y_offset))
-                    screen.blit(texte_surface, texte_rect)
-                    y_offset += 50
-                    pygame.display.flip()
-
-                pygame.time.wait(3000)
+                screen.blit(pygame.image.load(os.path.dirname(__file__) + "/sprites/images/credits.png"), (0,0))
+                pygame.display.flip()
+                waiting = True
+                while (waiting):
+                    for event in pygame.event.get():
+                        if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN:
+                            waiting = False
+                    pygame.time.Clock().tick(15)
 
             if arg.lower() == "notransition":
                 transitions = False
