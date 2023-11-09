@@ -2,9 +2,12 @@ import pygame
 import os
 
 class Button(pygame.sprite.Sprite):
-    
+    pygame.mixer.init()
+    SOUND = pygame.mixer.Sound(os.path.join(os.path.dirname(__file__)) + "/sounds/menu_button.mp3")
+
     def __init__(self, x, y, texte, color = ((180,180,180))):
         super().__init__()
+
         #self.image = pygame.image.load(os.path.join(os.path.dirname(__file__), "sprites/images/gros_button.png"))
         self.image = pygame.surface.Surface((300, 75))
         self.image.fill(color)

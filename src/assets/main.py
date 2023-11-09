@@ -2,6 +2,7 @@ import pygame
 import os
 import warnings
 import sys
+import Utils
 from bouton import Button
 from mj_crous import mj_crous
 from mj_carte import mj_carte
@@ -10,6 +11,11 @@ from mj_velo import mj_velo
 warnings.filterwarnings("ignore", "libpng warning: iCCP: known incorrect sRGB profile",category=RuntimeWarning)
 
 def startMenu(a_screen):
+    # Charger le son au format MP3
+    MENU_THEME = pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/main-menu.mp3")
+    CHANNEL_MM.play(MENU_THEME,loops=-1)
+    CHANNEL_MM = pygame.mixer.Channel(1)
+
     MID_X = 1024 / 2
     MID_Y = 768 / 2
     BG = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/startMenu/sm_BG0.png")
@@ -28,17 +34,27 @@ def startMenu(a_screen):
     a_screen.blit(BG, (0,0))
     screen.blit(LOGO, LOGO_RECT)
     inMenu = True
+    btnId = 0
     while (inMenu):
         for event in pygame.event.get():
                 if (event.type == pygame.MOUSEBUTTONDOWN and startButton.rect.collidepoint(pygame.mouse.get_pos())):
                         inMenu = False
-                        return True
-                if (event.type == pygame.MOUSEBUTTONDOWN and startButton.rect.collidepoint(pygame.mouse.get_pos())):
+                        btnId = id(startButton)
+
+                elif (event.type == pygame.MOUSEBUTTONDOWN and quitButton.rect.collidepoint(pygame.mouse.get_pos())):
                         inMenu = False
-                        return False
+                        btnId = id(quitButton)
         sprite_group.draw(a_screen)
         pygame.display.update()
         CLOCK.tick(30)
+    
+    Utils.play_sound_effect(Button.SOUND)
+    if (btnId ==  id(startButton)):
+        return 0
+    elif (btnId == id(quitButton)):
+        return 1
+    else:
+        return 2
     
 
 
@@ -102,6 +118,7 @@ def main():
 
 if __name__ == "__main__":
     pygame.init()
+    pygame.mixer.init()
     screen = pygame.display.set_mode((1024, 768))
     if (len(sys.argv) > 0):
         for arg in sys.argv:
@@ -128,7 +145,7 @@ if __name__ == "__main__":
             if arg.lower() == "sources":
                 print("World !")
         
-    if (not startMenu(screen)):
+    if (startMenu(screen) == 1):
         pygame.quit()
         sys.exit
     else:
