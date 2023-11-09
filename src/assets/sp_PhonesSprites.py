@@ -1,5 +1,6 @@
 import pygame
 import os
+import Utils
 
 class Teacher(pygame.sprite.Sprite):
     WATCHING_POS = (447, 200)
@@ -13,7 +14,7 @@ class Teacher(pygame.sprite.Sprite):
         self.rect.center = (self.BASE_X, self.BASE_Y)
         self.isWatching = False
 
-    def update(self): #TODO: nul
+    def update(self):
         if(self.duree < 25):
             #quand il se retourne il bouge
             self.isWatching = True

@@ -6,7 +6,9 @@ from sp_alarmClock import AlarmClock
 
 class mj_alarmClock():
 
+    #constante pour le bg
     IMG_BG = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/reveil/reveil_bg.png")
+    
     def __init__(self, level, screen = pygame.display.set_mode((1024, 768))):
         super().__init__()
         self.m_level = level
@@ -14,6 +16,11 @@ class mj_alarmClock():
     
     def run_miniJeu(self):
 
+        #constantes pour le son
+        THEME = pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/mj_reveilMain.mp3")
+        CHANNEL_MJ = pygame.mixer.Channel(1)
+        CHANNEL_MJ.play(THEME, loops=-1)
+        
         #clock du jeu
         clock = pygame.time.Clock()
 
@@ -52,7 +59,14 @@ class mj_alarmClock():
                     x, y = pygame.mouse.get_pos() #on récup la pos
                     if re.collidepoint(x, y):
                         compteur+=1
-                        if compteur == 3:
+                        #pour jouer les différents sons du réveil
+                        if compteur == 1:
+                            Utils.play_sound_effect(pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/mj_reveil1.mp3"))
+                        elif compteur == 2:
+                            Utils.play_sound_effect(pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/mj_reveil2.mp3"))
+                        elif compteur == 3:
+                            Utils.play_sound_effect(pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/mj_reveil3.mp3"))
+                            CHANNEL_MJ.stop()
                             return True
                         reveil.image = AlarmClock.STATES[compteur]
             
@@ -83,6 +97,7 @@ class mj_alarmClock():
 
             pygame.display.flip()
             timer += (clock.tick(30)/1000) #incrémenter le timer
+        CHANNEL_MJ.stop()
         return False
 
 if __name__ == "__main__":

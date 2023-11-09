@@ -1,6 +1,8 @@
 import pygame
 import random
 import Utils
+import os
+
 import sp_PhonesSprites as sp_PhonesSprites
 
 class mj_Phone():
@@ -81,7 +83,6 @@ class mj_Phone():
             #Spotted
             if (teach.isWatching and student.phoneOut):
                 currProgress -= 150
-                #TODO : PLAYSOUND
                 if (currProgress < PROGRESSMIN):
                     currProgress = PROGRESSMIN
 

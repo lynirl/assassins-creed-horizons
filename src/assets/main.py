@@ -3,24 +3,21 @@ import os
 import warnings
 import sys
 import Utils
+
 from bouton import Button
+
 from mj_crous import mj_crous
 from mj_carte import mj_carte
 from mj_alarmClock import mj_alarmClock
 from mj_velo import mj_velo
 from mj_phone import mj_Phone
 warnings.filterwarnings("ignore", "libpng warning: iCCP: known incorrect sRGB profile",category=RuntimeWarning)
-def play_sound_effect(sound_effect):
-    effect_channel = pygame.mixer.find_channel(True)
-    if effect_channel:
-        effect_channel.play(sound_effect)
-
 
 def startMenu(a_screen):
     # Charger le son au format MP3
-    MENU_THEME = pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/main-menu.mp3")
-    CHANNEL_MM = pygame.mixer.Channel(1)
-    CHANNEL_MM.play(MENU_THEME,loops=-1)
+    MENU_THEME = pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/main-menu.mp3") #constante du vent
+    CHANNEL_MM = pygame.mixer.Channel(1) #choisir le channel
+    CHANNEL_MM.play(MENU_THEME,loops=-1) #démarrer le vent, à l'infini (loops=-1)
 
     MID_X = 1024 / 2
     MID_Y = 768 / 2
@@ -35,8 +32,6 @@ def startMenu(a_screen):
 
     CLOCK = pygame.time.Clock()
 
-    inStartMenu = True
-
     a_screen.blit(BG, (0,0))
     screen.blit(LOGO, LOGO_RECT)
     inMenu = True
@@ -44,6 +39,7 @@ def startMenu(a_screen):
     while (inMenu):
         for event in pygame.event.get():
                 if (event.type == pygame.MOUSEBUTTONDOWN and startButton.rect.collidepoint(pygame.mouse.get_pos())):
+                        CHANNEL_MM.stop() #arrêter le vent quand on démarre le jeu
                         inMenu = False
                         btnId = id(startButton)
                 elif (event.type == pygame.MOUSEBUTTONDOWN and quitButton.rect.collidepoint(pygame.mouse.get_pos())):
@@ -53,7 +49,7 @@ def startMenu(a_screen):
         pygame.display.update()
         CLOCK.tick(30)
     
-    play_sound_effect(Button.SOUND)
+    Utils.play_sound_effect(Button.SOUND)
     if (btnId ==  id(startButton)):
         return 0
     elif (btnId == id(quitButton)):
@@ -65,6 +61,10 @@ def startMenu(a_screen):
 
 
 def main():
+    #channels pour pouvoir les arrêter a tout moment (on en utilise maximum 2)
+    CHANNEL_1 = pygame.mixer.Channel(1)
+    CHANNEL_2 = pygame.mixer.Channel(2)
+
     IMG_SUCCESS = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/succes.png")
     IMG_ECHEC = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/explosion.png")
     IMG_CHARGEMENTS = [pygame.image.load(os.path.dirname(__file__) + "/sprites/images/transition/tr_lit.png"),
@@ -96,6 +96,7 @@ def main():
             pygame.time.wait(3000)
             screen.fill("black")
             if (mini_jeux[i].run_miniJeu()):
+                Utils.play_sound_effect(pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/main_succes.mp3")) #son succès
                 for j in range(400, 650, 20):
                     img_temp = pygame.transform.scale(IMG_SUCCESS, (j, j))
                     rect = img_temp.get_rect()
@@ -106,6 +107,7 @@ def main():
                 pygame.time.wait(500)
                 score += 1
             else:
+                Utils.play_sound_effect(pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/main_explo.mp3")) #son fail
                 for j in range(1, 10):
                     img_temp = pygame.transform.scale(IMG_ECHEC, ((j/10) *900, (j/10) *900))
                     rect = img_temp.get_rect()
@@ -118,6 +120,10 @@ def main():
             del(mini_jeux[i])
             # i+=1
         round +=1
+    #plus de musique   
+    CHANNEL_1.stop()
+    CHANNEL_2.stop()
+    Utils.play_sound_effect(pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/pre_gameover.mp3")) #son gameover
     screen.blit(IMG_GAMEOVER,(0,0))
 
     font = pygame.font.Font(None, 50)
@@ -143,6 +149,8 @@ if __name__ == "__main__":
     pygame.mixer.init()
     screen = pygame.display.set_mode((1024, 768))
     pygame.display.set_caption("Stuck in the loop")
+
+    #arguments en ligne de commande
     if (len(sys.argv) > 0):
         for arg in sys.argv:
             if arg.lower() == "credits":

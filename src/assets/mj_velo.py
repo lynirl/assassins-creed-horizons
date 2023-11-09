@@ -21,8 +21,13 @@ class mj_velo():
     def run_miniJeu(self):
         pygame.init()
         self.screen = pygame.display.set_mode((1024, 768))
-        #Timer
 
+        #son!!
+        THEME = pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/MAIN_THEME.mp3")
+        CHANNEL_MJ = pygame.mixer.Channel(1)
+        CHANNEL_MJ.play(THEME, loops=-1)
+
+        #Timer
         clock = pygame.time.Clock()
         timer = 0
         MAX_TIME = Utils.getMaxTimeForLevel(10,self.m_level)
@@ -53,8 +58,6 @@ class mj_velo():
                         velo_frame += 1
                         if (velo_frame == len(mj_velo.VELO_FS)):
                             velo_frame = 0
-                    # else:
-                    #     self.erreur(screen)
 
             barre_w = TIMER_WIDTH * (1-(timer/MAX_TIME))
             loading_bar_rect = pygame.Rect(mid_x-(TIMER_WIDTH/2), mid_y-250, barre_w, 20)

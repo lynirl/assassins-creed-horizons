@@ -17,6 +17,9 @@ class mj_carte():
         self.screen = screen
 
     def run_miniJeu(self):
+
+        #son
+
         success = False
         clock = pygame.time.Clock()
         timer = 0
@@ -67,6 +70,7 @@ class mj_carte():
                 if id(overlap[0]) == id(checkpoints.liste[checkpoints.index]):
                     checkpoints.index += 1
                     if (checkpoints.index == len(checkpoints.liste)):
+                        Utils.play_sound_effect(pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/mj_card.mp3")) #son bip
                         return True
 
             self.screen.fill((31,31,31))

@@ -13,6 +13,13 @@ class mj_crous():
         self.screen = screen
 
     def run_miniJeu(self):
+
+        #constantes son
+        THEME = pygame.mixer.Sound(os.path.dirname(__file__) + "/sounds/gens_qui_parlent.mp3")
+        CHANNEL_MJ = pygame.mixer.Channel(2) #son des gens en fond constant
+        CHANNEL_MJ.play(THEME, loops=-1)
+
+
         # framerate = Utils.getFramerateForLevel(60, self.m_level)
         clock = pygame.time.Clock()
         timer = 0
@@ -36,6 +43,7 @@ class mj_crous():
                      for sprite in sprite_group:
                         if sprite.rect.collidepoint(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]):
                             #sprite.kill()
+                            CHANNEL_MJ.stop()
                             return sprite.type
 
             self.screen.blit(mj_crous.IMG_BG, (0,0))
@@ -52,7 +60,7 @@ class mj_crous():
             
             timer += clock.tick(30)/1000
             
-        
+        CHANNEL_MJ.stop()
         return False
     
 
