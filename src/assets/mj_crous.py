@@ -33,7 +33,7 @@ class mj_crous():
 
         stars = []
         for i in range(self.m_level + 3):
-            stars.append(newStar(200, 200, self.screen.get_width()-200,self.screen.get_height()-200, stars))  
+            stars.append(newStar(200, 200, self.screen.get_width()-300,self.screen.get_height()-200, stars))  
         stars[0] = Star(stars[0].rect.x, stars[0].rect.y, True)
 
         sprite_group.add(stars)
