@@ -3,6 +3,7 @@ import os
 import warnings
 import sys
 import Utils
+import sp_Vie
 
 from bouton import Button
 
@@ -78,12 +79,12 @@ def main():
     MID_X = 1024 / 2
     MID_Y = 768 / 2
     CLOCK = pygame.time.Clock()
+
     score = 0
     round = 1
     vies = 3
 
 
-    
     while (round < 10 and vies > 0):
         mini_jeux = [mj_alarmClock(round, screen),
                      mj_velo(round, screen),
