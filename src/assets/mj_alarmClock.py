@@ -1,5 +1,6 @@
 import pygame
 import os
+import math
 import random
 import Utils
 from sp_alarmClock import AlarmClock
@@ -8,7 +9,9 @@ class mj_alarmClock():
 
     #constante pour le bg
     IMG_BG = pygame.image.load(os.path.dirname(__file__) + "/sprites/images/reveil/reveil_bg.png")
-    
+
+    def getTimeForLevelClock(self, level):
+        return ((math.e ** (2.5 - (0.25 * level))) * 0.4) + 1.5
     def __init__(self, level, screen = pygame.display.set_mode((1024, 768))):
         super().__init__()
         self.m_level = level
@@ -28,7 +31,7 @@ class mj_alarmClock():
         clock = pygame.time.Clock()
 
         #temps écoulé et temps max
-        max_time = Utils.getMaxTimeForLevel(12, self.m_level)
+        max_time = self.getTimeForLevelClock(self.m_level)
         timer = 0
         timer_width = 600
 
@@ -46,8 +49,8 @@ class mj_alarmClock():
         re = reveil.rect
 
         #vitesse & direction
-        rect_speed_x = random.randint(-1, -1) * (1.3**self.m_level)#random.randint(-1, -1) * (15 * (self.m_level / 10))
-        rect_speed_y = random.randint(-1, -1) * (1.3**self.m_level)#random.randint(-1, -1) * (15 * (self.m_level / 10))
+        rect_speed_x = random.randint(-1, -1) * (1.2**self.m_level)#random.randint(-1, -1) * (15 * (self.m_level / 10))
+        rect_speed_y = random.randint(-1, -1) * (1.2**self.m_level)#random.randint(-1, -1) * (15 * (self.m_level / 10))
 
         #compteur de clicks
         compteur = 0
@@ -86,6 +89,7 @@ class mj_alarmClock():
             if re.x + 200 > 1024 or re.x < 0:
                 rect_speed_x = -rect_speed_x #la même ici
             
+            self.screen.fill("black")
             self.screen.blit(mj_alarmClock.IMG_BG, (0,0))
 
             sp_group.draw(self.screen)
