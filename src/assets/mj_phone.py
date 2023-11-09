@@ -115,7 +115,6 @@ class mj_Phone():
             
             #-----------------------------------
 
-            #60 fps
             clock.tick(30)
 
             pygame.display.flip()
@@ -142,4 +141,4 @@ if __name__ == "__main__":
     print("état:", obj.run_miniJeu())
 
     pygame.quit()
-print("Ok")
+    print("Ok")
