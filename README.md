@@ -1,4 +1,4 @@
-# assassins-creed-horizons
+# Stuck in the Loop
 GameJam Python 2023
 ## Arguments:
 - credits : affiche les credits
