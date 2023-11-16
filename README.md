@@ -21,7 +21,8 @@ voiture dans la ville : pixiliart
 chambre jeu du réveil : vecteezy
 écran de démarrage : google earth studio
 
-### Bruitage : Tous les bruitages viennent de youtube
+### Bruitage :
+Tous les bruitages viennent de youtube
 - main theme : LoonBoon (in-game) - supershigi
 - jeu du telephone : Anime Sound Effect - 2MirrorDialogue
 - click bouton : Minecraft Stone Block Place Sound Effect - PureL - Secret
